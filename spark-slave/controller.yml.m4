@@ -20,17 +20,21 @@ spec:
         - name: SERVICE
           image: REPOSITORY/SERVICE:CONTAINER_TAG
           ports:
-            - containerPort: 8080
-            - containerPort: 7077
+            - containerPort: 8081
+          env:
+            - name: `SPARK_WORKER_CORES'
+              value: "SPARK_WORKER_CORES"
+            - name: `SPARK_WORKER_MEMORY'
+              value: "SPARK_WORKER_MEMORY"
           livenessProbe:
                 httpGet:
                   path: /
-                  port: 8080
+                  port: 8081
                 initialDelaySeconds: 60 
                 timeoutSeconds: 10
           readinessProbe:
                 httpGet:
                   path: /
-                  port: 8080
+                  port: 8081
       imagePullSecrets:
         - name: docker
