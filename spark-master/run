@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Kubernetes overwrites this environment variable
+export SPARK_MASTER_PORT=7077
+/usr/local/spark/sbin/start-master.sh
+
+SPARK_PID=$(cat /tmp/spark--org.apache.spark.deploy.master.Master-1.pid)
+while ps -p $SPARK_PID > /dev/null; do sleep 1; done
