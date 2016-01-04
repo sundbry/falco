@@ -1,8 +1,10 @@
 #!/bin/bash
 
-# Kubernetes overwrites this environment variable
+# Kubernetes overwrites $SPARK_MASTER_PORT if there's a service named spark-master
+export SPARK_MASTER_IP=spark-master
 export SPARK_MASTER_PORT=7077
-/usr/local/spark/sbin/start-master.sh
+echo "$(hostname -i) spark-master" >> /etc/hosts
+setuser app /usr/local/spark/sbin/start-master.sh
 
 SPARK_PID=$(cat /tmp/spark--org.apache.spark.deploy.master.Master-1.pid)
 while ps -p $SPARK_PID > /dev/null; do sleep 1; done

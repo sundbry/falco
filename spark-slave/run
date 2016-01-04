@@ -1,0 +1,6 @@
+#!/bin/bash
+
+setuser app /usr/local/spark/sbin/start-slave.sh spark://spark-master:7077
+
+SPARK_PID=$(cat /tmp/spark--org.apache.spark.deploy.worker.Worker-1.pid)
+while ps -p $SPARK_PID > /dev/null; do sleep 1; done

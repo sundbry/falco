@@ -1,7 +1,9 @@
-FROM REPOSITORY/pypy
+FROM REPOSITORY/jre
 
 EXPOSE 8888
 
+RUN apt-get update
+RUN apt-get install -y python-pip python-dev
 RUN pip install jupyter
 
 ENV SPARK_HOME /usr/local/spark
