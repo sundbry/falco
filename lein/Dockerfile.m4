@@ -1,5 +1,5 @@
 #  From this base-image / starting-point
-FROM REPOSITORY/jre
+FROM REPOSITORY/jdk
 
 # Share lein 
 ENV LEIN_HOME=/usr/local/share/lein
