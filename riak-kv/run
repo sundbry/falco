@@ -16,7 +16,6 @@ RIAK_CLUSTER_HOST=$(curl --insecure --cacert /var/run/secrets/kubernetes.io/serv
 if [ "$RIAK_CLUSTER_HOST" == "null" ]; then
   RIAK_CLUSTER_HOST=""
 fi
-export RIAK_CLUSTER_HOST
 
 m4 -DRIAK_NODE_HOST=$RIAK_NODE_HOST -DRIAK_DATA_DIR=$RIAK_DATA_DIR -DRIAK_LOG_DIR=$RIAK_LOG_DIR riak.conf.m4 > /etc/riak/riak.conf
 
@@ -25,15 +24,21 @@ chmod 0755 $RIAK_DATA_DIR $RIAK_LOG_DIR
 
 riak start
 riak ping
-if [ -z $RIAK_CLUSTER_HOST ]; then
-  echo "RIAK_CLUSTER_HOST undefined. Not joining any cluster."
+if [ -z "$RIAK_CLUSTER_HOST" ]; then
+  echo "We are the cluster leader."
 else
-  /etc/service/riak/cluster-join.sh
+  echo "Joining the cluster at $RIAK_CLUSTER_HOST"
+  riak-admin cluster join riak@$RIAK_CLUSTER_HOST
+  riak-admin cluster status
+  # If the last to join, (re)commit the cluster.
+  if riak-admin member-status | egrep "joining|valid" | wc -l | grep -q "$RIAK_CLUSTER_SIZE"; then
+      riak-admin cluster plan && riak-admin cluster commit
+  fi
 fi
 
-# Wait while riak is alive
+# Sleep while riak is alive
 while [ true ]; do
-  sleep 60
+  sleep 30
   riak ping
   if [ ! $? ]; then
     exit 1

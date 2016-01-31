@@ -1,5 +1,5 @@
-FROM REPOSITORY/jre
-# JRE required for Solr (Riak Search)
+FROM REPOSITORY/jdk
+# Java required for Solr (Riak Search)
 
 # Open ports (see doc/Ports.md)
 EXPOSE 4369 8087 8093 8098 8099 8985
@@ -21,8 +21,7 @@ RUN apt-get install -y jq
 # Setup the Riak service
 RUN mkdir -p /etc/service/riak
 ADD run /etc/service/riak/
-ADD cluster-join.sh /etc/service/riak/
-RUN chmod 0755 /etc/service/riak/*
+RUN chmod 0755 /etc/service/riak/run
 
 # Add the config template
 ADD riak.conf.m4 /etc/service/riak/riak.conf.m4

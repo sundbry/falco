@@ -28,3 +28,11 @@ spec:
               value: "ENVIRONMENT"
             - name: `RIAK_CLUSTER_SIZE'
               value: "RIAK_CLUSTER_SIZE"
+          volumeMounts:
+            - name: SERVICE-data
+              mountPath: /var/lib/riak
+      volumes:
+        - name: SERVICE-data
+          emptyDir: {}
+      imagePullSecrets:
+        - name: docker
