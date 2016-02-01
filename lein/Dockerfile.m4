@@ -1,10 +1,14 @@
-#  From this base-image / starting-point
-FROM REPOSITORY/jdk
+FROM REPOSITORY/jdk:2016-01-31-003427
 
 # Share lein 
 ENV LEIN_HOME=/usr/local/share/lein
 
+RUN mkdir -p $LEIN_HOME
+RUN chown app:app $LEIN_HOME
+
 # Install lein
 RUN wget https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein -O /usr/local/bin/lein
 RUN chmod 0755 /usr/local/bin/lein
-RUN LEIN_ROOT=true lein version
+USER app
+RUN lein version
+USER root
