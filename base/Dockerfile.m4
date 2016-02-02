@@ -7,7 +7,7 @@ RUN apt-get update -q -q
 RUN apt-get upgrade --yes
 
 # Install utitiles
-RUN apt-get install -y wget less screen m4 make git
+RUN apt-get install -y wget less m4 make git
 
 # Configure syslog
 ADD syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
