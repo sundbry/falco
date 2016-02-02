@@ -1,4 +1,4 @@
-FROM REPOSITORY/jdk:2016-01-31-003427
+FROM REPOSITORY/jdk
 
 # Share lein 
 ENV LEIN_HOME=/usr/local/share/lein
