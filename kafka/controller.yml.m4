@@ -8,7 +8,7 @@ metadata:
     role: SERVICE
     profile: PROFILE
 spec:
-  replicas: 1 # Do NOT replicate this controller -RS
+  replicas: 1 # Use profiles to replicate this controller
   selector:
     name: NAME
     role: SERVICE
