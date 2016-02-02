@@ -1,17 +1,20 @@
+define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
 kind: ReplicationController
 apiVersion: v1
 metadata:
-  name: SERVICE-CONTROLLER_TAG
+  name: NAME
 spec:
-  replicas: REPLICAS
+  replicas: 1 # Use profiles to replicate
   selector:
-    name: SERVICE-CONTROLLER_TAG
+    name: NAME
     role: SERVICE
+    profile: "PROFILE"
   template:
     metadata:
       labels:
-        name: SERVICE-CONTROLLER_TAG
+        name: NAME
         role: SERVICE
+        profile: "PROFILE"
     spec:
       containers:
         - name: SERVICE
@@ -25,14 +28,17 @@ spec:
             - containerPort: 8985
           env:
             - name: `KUBE_NAMESPACE'
-              value: "ENVIRONMENT"
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
             - name: `RIAK_CLUSTER_SIZE'
               value: "RIAK_CLUSTER_SIZE"
           volumeMounts:
-            - name: SERVICE-data
+            - name: NAME-data
               mountPath: /var/lib/riak
       volumes:
-        - name: SERVICE-data
-          emptyDir: {}
+        - name: NAME-data
+          hostPath:
+            path: HOST_VOLUME_PATH
       imagePullSecrets:
         - name: docker

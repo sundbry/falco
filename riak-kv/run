@@ -40,7 +40,18 @@ fi
 while [ true ]; do
   sleep 30
   riak ping
-  if [ ! $? ]; then
-    exit 1
+  if [ $? -ne 0 ]; then
+    sleep 1
+    echo "Retrying ping..."
+    riak ping
+    if [ $? -ne 0 ]; then
+      sleep 5
+      echo "Retrying ping again..."
+      riak ping
+      if [ $? -ne 0 ]; then
+        echo "Exiting"
+        exit 1
+      fi
+    fi
   fi
 done
