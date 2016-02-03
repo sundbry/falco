@@ -1,9 +1,11 @@
+define(NAME, ifdef(`PROFILE', SERVICE-PROFILE, SERVICE))
 kind: Service
 apiVersion: v1
 metadata:
-  name: SERVICE
+  name: NAME
   labels:
-    name: SERVICE
+    name: NAME
+    ifdef(`PROFILE', profile: "PROFILE")
 spec:
   ports:
     - port: 8087
@@ -20,4 +22,5 @@ spec:
       name: solr-api
   selector:
     role: SERVICE
+    ifdef(`PROFILE', profile: "PROFILE")
   type: ClusterIP

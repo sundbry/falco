@@ -105,7 +105,7 @@ log.crash.rotation.keep = 5
 ## Acceptable values:
 ##   - text
 # nodename = riak@127.0.0.1
-nodename = riak@RIAK_NODE_HOST
+nodename = RIAK_NODE_NAME
 
 ## Cookie for distributed node communication.  All nodes in the
 ## same cluster should use the same cookie or they will not be able to
