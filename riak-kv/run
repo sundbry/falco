@@ -30,7 +30,7 @@ chmod 0755 $RIAK_DATA_DIR $RIAK_LOG_DIR
 
 riak start
 riak ping
-if [ -z "$RIAK_CLUSTER_HOST" ]; then
+if [ -z "$RIAK_CLUSTER_LEADER" ]; then
   echo "We are the cluster leader."
 else
   echo "Joining the cluster at $RIAK_CLUSTER_LEADER"
