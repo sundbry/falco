@@ -54,6 +54,9 @@ spec:
           limits:
             cpu: 100m
             memory: 50Mi
+        env:
+          - name: `SKYDNS_NAMESERVERS'
+            value: "SKYDNS_NAMESERVERS"
         args:
         # command = "/skydns"
         - -machines=http://127.0.0.1:4001
