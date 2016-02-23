@@ -1,8 +1,9 @@
+define(NAME, SERVICE-CONTROLLER_TAG)
 apiVersion: v1
 kind: ReplicationController
 metadata:
-  name: kube-dns-v9
-  namespace: kube-system
+  name: NAME
+  namespace: ENVIRONMENT
   labels:
     k8s-app: kube-dns
     version: v9
