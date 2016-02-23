@@ -1,4 +1,6 @@
-define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
+define(`NAME', ifelse(PROFILE, `',
+                 SERVICE-CONTROLLER_TAG,
+                 SERVICE-PROFILE-CONTROLLER_TAG))
 kind: ReplicationController
 apiVersion: v1
 metadata:
