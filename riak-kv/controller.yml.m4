@@ -35,10 +35,10 @@ spec:
                   fieldPath: metadata.namespace
             - name: `RIAK_CLUSTER_SIZE'
               value: "RIAK_CLUSTER_SIZE"
-            - name: `RIAK_NODE_NAME'
-              value: "riak@SERVICE-PROFILE"
+            - name: `RIAK_NODE_HOSTNAME'
+              value: "RIAK_NODE_HOSTNAME"
             - name: `RIAK_CLUSTER_JOIN'
-              value: "riak@riak-kv-1"
+              value: "RIAK_CLUSTER_JOIN"
           volumeMounts:
             - name: NAME-data
               mountPath: /var/lib/riak
