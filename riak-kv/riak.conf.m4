@@ -10,7 +10,7 @@
 ## Acceptable values:
 ##   - one of: off, file, console, both
 # log.console = console
-log.console = both
+log.console = console
 
 ## The severity level of the console log, default is 'info'.
 ## 
