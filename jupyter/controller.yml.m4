@@ -1,23 +1,24 @@
+define(NAME, SERVICE-CONTROLLER_TAG)
 kind: ReplicationController
 apiVersion: v1
 metadata:
-  name: SERVICE.CONTROLLER_TAG
+  name: NAME
   labels:
-    name: SERVICE.CONTROLLER_TAG
+    name: NAME
     role: SERVICE
 spec:
   replicas: 1
   selector:
-    name: SERVICE.CONTROLLER_TAG
+    name: NAME
     role: SERVICE
   template:
     metadata:
       labels:
-        name: SERVICE.CONTROLLER_TAG
+        name: NAME
         role: SERVICE
     spec:
       containers:
-        - name: SERVICE
+        - name: NAME
           image: REPOSITORY/SERVICE:CONTAINER_TAG
           ports:
             - containerPort: 8888

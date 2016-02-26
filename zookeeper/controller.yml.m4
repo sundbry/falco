@@ -6,21 +6,21 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+    profile: "PROFILE"
     zk-id: "ZK_ID"
 spec:
   replicas: 1 # Do NOT replicate this controller -RS
   selector:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+    profile: "PROFILE"
     zk-id: "ZK_ID"
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-        profile: PROFILE
+        profile: "PROFILE"
         zk-id: "ZK_ID"
     spec:
       containers:

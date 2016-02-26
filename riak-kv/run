@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RIAK_NODE_HOST=$(hostname -i)
-RIAK_NODE_NAME=riak@$RIAK_NODE_HOST
+RIAK_NODE_NAME=$(hostname)@$RIAK_NODE_HOST
 RIAK_DATA_DIR=/var/lib/riak/$RIAK_NODE_NAME
 RIAK_LOG_DIR=/var/log/riak
 
@@ -13,9 +13,9 @@ fi
 
 # Get the IP of any running riak sibling
 RIAK_ROLE="riak-kv"
-RIAK_CLUSTER_HOST=$(curl --insecure --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" "${KUBE_MASTER_ENDPOINT}/api/v1/namespaces/${KUBE_NAMESPACE}/pods/?pretty=false" | jq -r ".items | map(select(.metadata.labels[\"role\"] == \"${RIAK_ROLE}\")) | map(select(.status.phase == \"Running\")) | map(.status.podIP) | map(select(. != \"${RIAK_NODE_HOST}\")) | .[0]")
-if [ "$RIAK_CLUSTER_HOST" == "null" ]; then
-  RIAK_CLUSTER_HOST=""
+RIAK_CLUSTER_LEADER=$(curl --insecure --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" "${KUBE_MASTER_ENDPOINT}/api/v1/namespaces/${KUBE_NAMESPACE}/pods/?pretty=false" | jq -r ".items | map(select(.metadata.labels[\"role\"] == \"${RIAK_ROLE}\")) | map(select(.status.phase == \"Running\")) | map(.metadata.name + \"@\" + .status.podIP) | map(select(. != \"${RIAK_NODE_NAME}\")) | .[0]")
+if [ "$RIAK_CLUSTER_LEADER" == "null" ]; then
+  RIAK_CLUSTER_LEADER=""
 fi
 
 m4 \
@@ -30,11 +30,11 @@ chmod 0755 $RIAK_DATA_DIR $RIAK_LOG_DIR
 
 riak start
 riak ping
-if [ -z "$RIAK_CLUSTER_HOST" ]; then
+if [ -z "$RIAK_CLUSTER_LEADER" ]; then
   echo "We are the cluster leader."
 else
-  echo "Joining the cluster at $RIAK_CLUSTER_HOST"
-  riak-admin cluster join riak@$RIAK_CLUSTER_HOST
+  echo "Joining the cluster at $RIAK_CLUSTER_LEADER"
+  riak-admin cluster join $RIAK_CLUSTER_LEADER
   riak-admin cluster status
   # If the last to join, (re)commit the cluster.
   if riak-admin member-status | egrep "joining|valid" | wc -l | grep -q "$RIAK_CLUSTER_SIZE"; then
