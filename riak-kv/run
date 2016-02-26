@@ -15,10 +15,10 @@ fi
 
 # Get the IP of any running riak sibling
 RIAK_ROLE="riak-kv"
-RIAK_CLUSTER_LEADER=$(curl --insecure --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" "${KUBE_MASTER_ENDPOINT}/api/v1/namespaces/${KUBE_NAMESPACE}/pods/?pretty=false" | jq -r ".items | map(select(.metadata.labels[\"role\"] == \"${RIAK_ROLE}\")) | map(select(.status.phase == \"Running\")) | map(.metadata.name + \"@\" + .status.podIP) | map(select(. != \"${RIAK_NODE_NAME}\")) | .[0]")
-if [ "$RIAK_CLUSTER_LEADER" == "null" ]; then
-  RIAK_CLUSTER_LEADER=""
-fi
+#RIAK_CLUSTER_JOIN=$(curl --insecure --cacert /var/run/secrets/kubernetes.io/serviceaccount/ca.crt -H "Authorization: Bearer $(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" "${KUBE_MASTER_ENDPOINT}/api/v1/namespaces/${KUBE_NAMESPACE}/pods/?pretty=false" | jq -r ".items | map(select(.metadata.labels[\"role\"] == \"${RIAK_ROLE}\")) | map(select(.status.phase == \"Running\")) | map(.metadata.name + \"@\" + .status.podIP) | map(select(. != \"${RIAK_NODE_NAME}\")) | .[0]")
+#if [ "$RIAK_CLUSTER_JOIN" == "null" ]; then
+#  RIAK_CLUSTER_JOIN=""
+#fi
 
 m4 \
   -DRIAK_NODE_HOST=$RIAK_NODE_HOST \
@@ -32,11 +32,15 @@ chmod 0755 $RIAK_DATA_DIR $RIAK_LOG_DIR
 
 riak start
 riak ping
-if [ -z "$RIAK_CLUSTER_LEADER" ]; then
+if [ "$RIAK_CLUSTER_JOIN" = "$RIAK_NODE_NAME" ]; then
   echo "We are the cluster leader."
 else
-  echo "Joining the cluster at $RIAK_CLUSTER_LEADER"
-  riak-admin cluster join $RIAK_CLUSTER_LEADER
+  echo "Joining the cluster at $RIAK_CLUSTER_JOIN"
+  riak-admin cluster join $RIAK_CLUSTER_JOIN
+  if [ $? -ne 0 ]; then
+    echo "Failed to join cluster! Aborting."
+    exit 1
+  fi
   riak-admin cluster status
   # If the last to join, (re)commit the cluster.
   if riak-admin member-status | egrep "joining|valid" | wc -l | grep -q "$RIAK_CLUSTER_SIZE"; then
@@ -57,7 +61,7 @@ while [ true ]; do
       echo "Retrying ping again..."
       riak ping
       if [ $? -ne 0 ]; then
-        echo "Exiting"
+        echo "Aborting."
         exit 1
       fi
     fi

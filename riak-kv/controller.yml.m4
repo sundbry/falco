@@ -36,7 +36,9 @@ spec:
             - name: `RIAK_CLUSTER_SIZE'
               value: "RIAK_CLUSTER_SIZE"
             - name: `RIAK_NODE_NAME'
-              value: "SERVICE-PROFILE"
+              value: "riak@SERVICE-PROFILE"
+            - name: `RIAK_CLUSTER_JOIN'
+              value: "riak@riak-kv-1"
           volumeMounts:
             - name: NAME-data
               mountPath: /var/lib/riak
