@@ -20,6 +20,9 @@ fi
 #  RIAK_CLUSTER_JOIN=""
 #fi
 
+mkdir -p $RIAK_DATA_DIR $RIAK_LOG_DIR
+chown riak:riak $RIAK_DATA_DIR $RIAK_LOG_DIR
+
 echo "$RIAK_NODE_HOST $RIAK_NODE_HOSTNAME" >> /etc/hosts
 
 m4 \
