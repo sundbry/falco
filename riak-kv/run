@@ -2,7 +2,6 @@
 
 RIAK_NODE_HOST=$(hostname -i)
 #RIAK_NODE_NAME=$(hostname)@$RIAK_NODE_HOST
-RIAK_NODE_NAME=riak@$SERVICE-$PROFILE
 RIAK_DATA_DIR=/var/lib/riak/$RIAK_NODE_NAME
 RIAK_LOG_DIR=/var/log/riak
 
