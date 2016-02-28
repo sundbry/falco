@@ -1,4 +1,4 @@
-define(NAME, ifdef(`ZK_ID', SERVICE-ZK_ID, SERVICE))
+define(NAME, ifdef(`PROFILE', SERVICE-PROFILE, SERVICE))
 kind: Service
 apiVersion: v1
 metadata:
@@ -21,3 +21,4 @@ spec:
     role: SERVICE
     ifdef(`ZK_ID', zk-id: "ZK_ID")
   type: ClusterIP
+  ifelse(PROXY, `true', `', `clusterIP: None')

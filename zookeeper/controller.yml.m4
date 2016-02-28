@@ -1,4 +1,6 @@
 define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
+define(`ZOOKEEPER_CLUSTER_SUBDOMAIN', SERVICE)
+define(`ZOOKEEPER_NODE_HOSTNAME', SERVICE-PROFILE)
 kind: ReplicationController
 apiVersion: v1
 metadata:
@@ -17,6 +19,9 @@ spec:
     zk-id: "ZK_ID"
   template:
     metadata:
+      annotations:
+        pod.beta.kubernetes.io/subdomain: ZOOKEEPER_CLUSTER_SUBDOMAIN
+        pod.beta.kubernetes.io/hostname: ZOOKEEPER_NODE_HOSTNAME
       labels:
         name: NAME
         role: SERVICE
@@ -52,3 +57,7 @@ spec:
         - name: SERVICE-secret
           secret:
             secretName: SERVICE
+      imagePullSecrets:
+        - name: docker
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)

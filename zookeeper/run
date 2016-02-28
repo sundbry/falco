@@ -1,9 +1,5 @@
 #!/bin/sh
 
-LOCAL_HOST=`hostname -i`
-# Servers must be named zookeeper-n
-# Bind to the address on this machine, not the Kubernetes service address
-echo "${LOCAL_HOST} zookeeper-${MYID}" >> /etc/hosts
 echo ${MYID:-1} > ${ZOODATA}/myid
 
 # server.1=...
