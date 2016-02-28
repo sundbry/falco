@@ -41,14 +41,14 @@ spec:
         - name: etcd-storage
           mountPath: /var/etcd/data
       - name: kube2sky
-        image: gcr.io/google_containers/kube2sky:1.11
+        image: artfulcoder/kube2sky:2.25.16-1
         resources:
           limits:
             cpu: 100m
             memory: 50Mi
         args:
         # command = "/kube2sky"
-        - -domain=DNS_DOMAIN
+        - --domain=DNS_DOMAIN
       - name: skydns
         image: gcr.io/google_containers/skydns:2015-10-13-8c72f8c
         resources:
