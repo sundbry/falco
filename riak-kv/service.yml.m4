@@ -7,7 +7,7 @@ metadata:
     name: NAME
     ifelse(PROFILE, `', `', profile: "PROFILE")
 spec:
-  ports:
+  ports: 
     - port: 8087
       targetPort: 8087
       protocol: TCP
@@ -22,5 +22,5 @@ spec:
       name: solr-api
   selector:
     role: SERVICE
-    ifelse(PROFILE, `', `', profile: "PROFILE")
   type: ClusterIP
+  ifelse(PROXY, `true', `', `clusterIP: None')

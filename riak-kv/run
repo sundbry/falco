@@ -1,7 +1,6 @@
 #!/bin/bash
 
 RIAK_NODE_HOST=$(hostname -i)
-RIAK_NODE_NAME=riak@$RIAK_NODE_HOSTNAME
 RIAK_DATA_DIR=/var/lib/riak/$RIAK_NODE_NAME
 RIAK_LOG_DIR=$RIAK_DATA_DIR/log
 
@@ -23,8 +22,6 @@ fi
 # We have to also make /var/log/riak since erlang.log's location seems tb be unconfigurable
 mkdir -p $RIAK_DATA_DIR $RIAK_LOG_DIR /var/log/riak
 chown riak:riak $RIAK_DATA_DIR $RIAK_LOG_DIR /var/log/riak
-
-echo "$RIAK_NODE_HOST $RIAK_NODE_HOSTNAME" >> /etc/hosts
 
 m4 \
   -DRIAK_NODE_HOST=$RIAK_NODE_HOST \

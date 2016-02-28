@@ -1,6 +1,10 @@
 define(`NAME', ifelse(PROFILE, `',
                  SERVICE-CONTROLLER_TAG,
                  SERVICE-PROFILE-CONTROLLER_TAG))
+dnl Subdomain must match an existing Kubernetes service
+define(`RIAK_CLUSTER_SUBDOMAIN', SERVICE)
+define(`RIAK_NODE_HOSTNAME', SERVICE-PROFILE)
+define(`RIAK_NODE_NAME', riak@RIAK_NODE_HOSTNAME.RIAK_CLUSTER_SUBDOMAIN.RIAK_CLUSTER_DOMAIN)
 kind: ReplicationController
 apiVersion: v1
 metadata:
@@ -13,6 +17,9 @@ spec:
     profile: "PROFILE"
   template:
     metadata:
+      annotations:
+        pod.beta.kubernetes.io/subdomain: RIAK_CLUSTER_SUBDOMAIN
+        pod.beta.kubernetes.io/hostname: RIAK_NODE_HOSTNAME
       labels:
         name: NAME
         role: SERVICE
@@ -35,10 +42,10 @@ spec:
                   fieldPath: metadata.namespace
             - name: `RIAK_CLUSTER_SIZE'
               value: "RIAK_CLUSTER_SIZE"
-            - name: `RIAK_NODE_HOSTNAME'
-              value: "RIAK_NODE_HOSTNAME"
             - name: `RIAK_CLUSTER_JOIN'
               value: "RIAK_CLUSTER_JOIN"
+            - name: `RIAK_NODE_NAME'
+              value: "RIAK_NODE_NAME"
           volumeMounts:
             - name: NAME-data
               mountPath: /var/lib/riak
