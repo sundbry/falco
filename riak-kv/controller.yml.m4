@@ -55,3 +55,5 @@ spec:
             path: HOST_VOLUME_PATH
       imagePullSecrets:
         - name: docker
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
