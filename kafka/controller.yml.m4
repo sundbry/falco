@@ -6,19 +6,19 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+    profile: "PROFILE"
 spec:
   replicas: 1 # Use profiles to replicate this controller
   selector:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+    profile: "PROFILE"
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-        profile: PROFILE
+        profile: "PROFILE"
     spec:
       containers:
         - name: SERVICE
@@ -40,6 +40,8 @@ spec:
             - name: SERVICE-secret
               mountPath: /etc/service/kafka/secret
               readOnly: true
+      imagePullSecrets:
+        - name: docker
       volumes:
         - name: SERVICE-volume-BROKER_ID
           hostPath:
@@ -47,3 +49,5 @@ spec:
         - name: SERVICE-secret
           secret:
             secretName: SERVICE
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)

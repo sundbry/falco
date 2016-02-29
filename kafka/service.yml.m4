@@ -1,9 +1,10 @@
+define(NAME, ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
 kind: Service
 apiVersion: v1
 metadata:
-  name: SERVICE
+  name: NAME
   labels:
-    name: SERVICE
+    name: NAME
 spec:
   ports:
     - port: 9092
