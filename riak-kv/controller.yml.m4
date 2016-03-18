@@ -50,16 +50,16 @@ spec:
             - name: NAME-data
               mountPath: /var/lib/riak
           livenessProbe:
-                httpGet:
-                  path: /ping
-                  port: 8098
-                initialDelaySeconds: 15
-                periodSeconds: 10
-                timeoutSeconds: 5
+            httpGet:
+              path: /ping
+              port: 8098
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 5
           readinessProbe:
-                httpGet:
-                  path: /ping
-                  port: 8098
+            httpGet:
+              path: /ping
+              port: 8098
 
       volumes:
         - name: NAME-data
