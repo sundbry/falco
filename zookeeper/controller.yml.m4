@@ -55,7 +55,7 @@ spec:
               command: ["sh", "-c", "echo stat | nc $(hostname -i) 2181"]
             initialDelaySeconds: 15
             periodSeconds: 15
-            timeoutSeconds: 2
+            timeoutSeconds: 5
       volumes:
         - name: SERVICE-volume-ZK_ID
           hostPath:
