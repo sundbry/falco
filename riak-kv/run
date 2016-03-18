@@ -21,7 +21,7 @@ fi
 
 # We have to also make /var/log/riak since erlang.log's location seems tb be unconfigurable
 mkdir -p $RIAK_DATA_DIR $RIAK_LOG_DIR /var/log/riak
-chown riak:riak $RIAK_DATA_DIR $RIAK_LOG_DIR /var/log/riak
+chown riak:riak /var/lib/riak $RIAK_DATA_DIR $RIAK_LOG_DIR /var/log/riak
 
 m4 \
   -DRIAK_NODE_HOST=$RIAK_NODE_HOST \
