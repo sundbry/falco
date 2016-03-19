@@ -5,3 +5,4 @@ metadata:
 type: Opaque
 data:
   log4j.properties: LOG4J_PROPERTIES_BASE64
+  server.properties.m4: SERVER_PROPERTIES_M4_BASE64

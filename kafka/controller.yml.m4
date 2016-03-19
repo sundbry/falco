@@ -34,6 +34,8 @@ spec:
               value: /var/local/kafka
             - name: LOG4J_PROPERTIES_PATH
               value: /etc/service/kafka/secret/log4j.properties
+            - name: SERVER_PROPERTIES_M4_PATH
+              value: /etc/service/kafka/secret/server.properties.m4
           volumeMounts:
             - name: SERVICE-volume-BROKER_ID
               mountPath: /var/local
