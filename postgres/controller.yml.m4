@@ -1,19 +1,22 @@
+define(`NAME', ifelse(PROFILE, `',
+                 SERVICE-CONTROLLER_TAG,
+                 SERVICE-PROFILE-CONTROLLER_TAG))
 kind: ReplicationController
 apiVersion: v1
 metadata:
-  name: SERVICE.CONTROLLER_TAG
+  name: NAME
   labels:
-    name: SERVICE.CONTROLLER_TAG
+    name: NAME
     role: SERVICE
 spec:
   replicas: 1 # Do NOT replicate this controller -RS
   selector:
-    name: SERVICE.CONTROLLER_TAG
+    name: NAME
     role: SERVICE
   template:
     metadata:
       labels:
-        name: SERVICE.CONTROLLER_TAG
+        name: NAME
         role: SERVICE
     spec:
       containers:
@@ -27,11 +30,20 @@ spec:
             - name: `POSTGRES_USER' # Superuser
               value: postgres
             - name: `POSTGRES_PASSWORD' # Superuser password
-              value: POSTGRES_PASSWORD
+              value: "POSTGRES_PASSWORD"
           volumeMounts:
-            - name: SERVICE-volume-0
+            - name: SERVICE-volume
               mountPath: /var/lib/postgresql/data
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U $POSTGRES_USER"]
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["sh", "-c", "pg_isready -U $POSTGRES_USER"]
       volumes:
-        - name: SERVICE-volume-0
+        - name: SERVICE-volume
           hostPath:
             path: HOST_VOLUME_PATH

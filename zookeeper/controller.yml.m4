@@ -50,6 +50,12 @@ spec:
             - name: SERVICE-secret
               mountPath: /etc/service/zookeeper/secret
               readOnly: true
+          livenessProbe:
+            exec:
+              command: ["sh", "-c", "echo stat | nc $(hostname -i) 2181"]
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
       volumes:
         - name: SERVICE-volume-ZK_ID
           hostPath:

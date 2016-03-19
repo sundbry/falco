@@ -1,4 +1,4 @@
-define(NAME, ifdef(`PROFILE', SERVICE-PROFILE, SERVICE))
+define(NAME, ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
 kind: Service
 apiVersion: v1
 metadata:
