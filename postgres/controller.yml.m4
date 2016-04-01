@@ -47,3 +47,5 @@ spec:
         - name: SERVICE-volume
           hostPath:
             path: HOST_VOLUME_PATH
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
