@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: sheepkiller/kafka-manager:1.3.0.4
+          image: sheepkiller/kafka-manager:CONTAINER_TAG
           ports:
             - containerPort: 9000
           env: 
