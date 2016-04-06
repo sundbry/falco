@@ -30,6 +30,9 @@ spec:
           - name: cgroups
             mountPath: /host/sys/fs/cgroup
             readOnly: true
+          - name: dd-agent-conf
+            mountPath: /conf.d
+            readOnly: true
       volumes:
         - hostPath:
             path: /var/run/docker.sock
@@ -40,3 +43,6 @@ spec:
         - hostPath:
             path: /sys/fs/cgroup
           name: cgroups
+        - hostPath:
+            path: /var/local/dd-agent/conf.d
+          name: dd-agent-conf
