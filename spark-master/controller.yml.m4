@@ -16,6 +16,8 @@ spec:
       labels:
         name: NAME
         role: SERVICE
+      annotations:
+        pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
       containers:
         - name: NAME
