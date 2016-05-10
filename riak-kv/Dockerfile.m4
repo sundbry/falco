@@ -12,11 +12,8 @@ VOLUME /var/log/riak
 RUN curl https://packagecloud.io/gpg.key | sudo apt-key add -
 RUN apt-get install -y apt-transport-https
 ADD basho.list /etc/apt/sources.list.d/basho.list
-RUN apt-get update
-RUN apt-get install -y riak=RIAK_VERSION
-
-# Install jq
-RUN apt-get install -y jq
+# Install jq for scripts
+RUN apt-get update -y -q -q && apt-get install -y -q -q riak=2.1.4-1 jq
 
 # Setup the Riak service
 RUN mkdir -p /etc/service/riak
