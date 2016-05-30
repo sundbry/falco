@@ -38,11 +38,16 @@ riak ping
 if [ "$RIAK_CLUSTER_JOIN" = "$RIAK_NODE_NAME" ]; then
   echo "We are the cluster leader."
 else
-  echo "Joining the cluster at $RIAK_CLUSTER_JOIN"
-  riak-admin cluster join $RIAK_CLUSTER_JOIN
-  if [ $? -ne 0 ]; then
-    echo "Failed to join cluster! Aborting."
-    exit 1
+  riak-admin cluster status | grep "$RIAK_CLUSTER_JOIN"
+  if [ $? -eq 0 ]; then
+    echo "Already a member of the cluster at $RIAK_CLUSTER_JOIN"
+  else
+    echo "Joining the cluster at $RIAK_CLUSTER_JOIN"
+    riak-admin cluster join $RIAK_CLUSTER_JOIN
+    if [ $? -ne 0 ]; then
+      echo "Failed to join cluster! Aborting."
+      exit 1
+    fi
   fi
   riak-admin cluster status
   # If the last to join, (re)commit the cluster.
@@ -51,22 +56,4 @@ else
   fi
 fi
 
-# Sleep while riak is alive
-while [ true ]; do
-  sleep 30
-  riak ping
-  if [ $? -ne 0 ]; then
-    sleep 1
-    echo "Retrying ping..."
-    riak ping
-    if [ $? -ne 0 ]; then
-      sleep 5
-      echo "Retrying ping again..."
-      riak ping
-      if [ $? -ne 0 ]; then
-        echo "Aborting."
-        exit 1
-      fi
-    fi
-  fi
-done
+sleep infinity

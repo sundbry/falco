@@ -1,12 +1,5 @@
 FROM REPOSITORY/base
 
-WORKDIR /usr/local/src
-RUN wget https://bitbucket.org/pypy/pypy/downloads/pypy-5.0.0-linux64.tar.bz2
-RUN tar -C /usr/local -xjf pypy-5.0.0-linux64.tar.bz2
-RUN ln -s /usr/local/pypy-5.0.0-linux64/bin/pypy /usr/local/bin
-RUN rm /usr/local/src/*
-WORKDIR /
-RUN pypy -V
-RUN apt-get update
-RUN apt-get install -y python-pip python-dev
+RUN cd /usr/local/src && wget -q https://bitbucket.org/pypy/pypy/downloads/pypy-5.1.1-linux64.tar.bz2 && tar -C /usr/local -xjf pypy-5.1.1-linux64.tar.bz2 && ln -s /usr/local/pypy-5.1.1-linux64/bin/pypy /usr/local/bin && rm /usr/local/src/* && pypy -V
+RUN apt-get update -q -q && apt-get install -y -q -q python-pip python-dev
 RUN pip install virtualenv
