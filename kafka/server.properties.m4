@@ -113,6 +113,13 @@ log.retention.check.interval.ms=300000
 # If log.cleaner.enable=true is set the cleaner will be enabled and individual logs can then be marked for log compaction.
 log.cleaner.enable=false
 
+############################# Misc ############################
+# Enable auto creation of topic on the server
+auto.create.topics.enable=false
+
+# Enables auto leader balancing. A background thread checks and triggers leader balance if required at regular intervals
+auto.leader.rebalance.enable=true
+
 ############################# Zookeeper #############################
 
 # Zookeeper connection string (see zookeeper docs for details).
