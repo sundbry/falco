@@ -4,4 +4,6 @@ if [ -z $NGINX_CONF ]; then
   NGINX_CONF=/etc/service/nginx/nginx.conf
 fi
 
+# Set proper permissions when we mount this
+chmod 0755 /var/log/nginx
 nginx -c $NGINX_CONF
