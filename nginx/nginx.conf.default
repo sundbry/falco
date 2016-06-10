@@ -1,0 +1,28 @@
+daemon off;
+
+events {
+	worker_connections 256;
+}
+
+http {
+
+  server {
+    # Internal access and monitoring
+    listen 81;
+    access_log off;
+
+    location = /nginx/status {
+      stub_status;
+    }
+  }
+
+  server {
+    listen 80;
+
+    location = / {
+      default_type text/plain;
+      return 200 "Hello world!";
+    }
+  }
+
+}

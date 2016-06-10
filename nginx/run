@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if [ -z $NGINX_CONF ]; then
+  NGINX_CONF=/etc/service/nginx/nginx.conf
+fi
+
+nginx -c $NGINX_CONF
