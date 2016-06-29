@@ -37,9 +37,8 @@ ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
 ENV PGDATA /var/lib/postgresql/data
 VOLUME /var/lib/postgresql/data
 
-COPY docker-entrypoint.sh /
-RUN chmod 0755 /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+RUN mkdir -p /etc/service/postgres
+COPY run /etc/service/postgres/run
+RUN chmod 0755 /etc/service/postgres/run
 
 EXPOSE 5432
-CMD ["postgres"]
