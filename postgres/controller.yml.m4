@@ -34,6 +34,14 @@ spec:
               value: postgres
             - name: `POSTGRES_PASSWORD' # Superuser password
               value: "POSTGRES_PASSWORD"
+            - name: `WALE_S3_PREFIX'
+              value: WALE_S3_PREFIX
+            - name: `WALE_S3_ENDPOINT'
+              value: WALE_S3_ENDPOINT
+            - name: `AWS_ACCESS_KEY_ID'
+              value: AWS_ACCESS_KEY_ID
+            - name: `AWS_SECRET_ACCESS_KEY'
+              value: AWS_SECRET_ACCESS_KEY
           volumeMounts:
             - name: SERVICE-volume
               mountPath: /var/lib/postgresql/data

@@ -1,0 +1,5 @@
+#!/bin/bash
+source /usr/local/venv/bin/activate
+export WALE_LOG_DESTINATION=syslog
+wal-e $@
+deactivate
