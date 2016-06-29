@@ -26,6 +26,9 @@ RUN apt-get install -y \
 		postgresql-$PG_MAJOR \
 		postgresql-contrib-$PG_MAJOR
 
+RUN apt-get install -y -q python-pip python-dev\
+  && pip install wal-e
+
 RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
 
 ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
