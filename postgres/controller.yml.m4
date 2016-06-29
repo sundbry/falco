@@ -1,3 +1,4 @@
+define(`CONTAINER_NAME', ifelse(CONTAINER_NAME, `', `postgres-9.5', CONTAINER_NAME))
 define(`NAME', ifelse(PROFILE, `',
                  SERVICE-CONTROLLER_TAG,
                  SERVICE-PROFILE-CONTROLLER_TAG))
@@ -23,7 +24,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: postgres:CONTAINER_TAG
+          image: REPOSITORY/CONTAINER_NAME:CONTAINER_TAG
           ports:
             - containerPort: 5432 # Postgres
           env: 

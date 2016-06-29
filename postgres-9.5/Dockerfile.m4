@@ -26,11 +26,6 @@ RUN apt-get install -y \
 		postgresql-$PG_MAJOR \
 		postgresql-contrib-$PG_MAJOR
 
-# make the sample config easier to munge (and "correct by default")
-RUN mv -v /usr/share/postgresql/$PG_MAJOR/postgresql.conf.sample /usr/share/postgresql/ \
-	&& ln -sv ../postgresql.conf.sample /usr/share/postgresql/$PG_MAJOR/ \
-	&& sed -ri "s!^#?(listen_addresses)\s*=\s*\S+.*!\1 = '*'!" /usr/share/postgresql/postgresql.conf.sample
-
 RUN mkdir -p /var/run/postgresql && chown -R postgres /var/run/postgresql
 
 ENV PATH /usr/lib/postgresql/$PG_MAJOR/bin:$PATH
@@ -38,7 +33,8 @@ ENV PGDATA /var/lib/postgresql/data
 VOLUME /var/lib/postgresql/data
 
 RUN mkdir -p /etc/service/postgres
-COPY run /etc/service/postgres/run
+ADD run /etc/service/postgres/run
+ADD postgresql.conf /etc/service/postgres/postgresql.conf
 RUN chmod 0755 /etc/service/postgres/run
 
 EXPOSE 5432
