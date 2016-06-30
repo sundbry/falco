@@ -4,16 +4,16 @@ set -e
 POSTGRESQL_CONF=/etc/service/postgres/postgresql.conf
 
 function check_base_backup {
-  echo "Checking base backup"
-  backup_state=$(setuser postgres wal-e backup-list)
-  let backup_count=$(echo $backup_state | wc -l)
-  let backup_count=$backup_count-1
+  logger "Checking base backup"
+  last_backup=$(setuser postgres wal-e backup-list | tail -n 1)
+  echo $last_backup | grep last_modified > /dev/null 2>&1
+  backup_not_present=$?
 
-  echo $backup_state
-
-  if [ $backup_count -eq 0 ]; then
-    "No backup present, creating initial backup."
+  if [ $backup_not_present ]; then
+    logger "No backup present, pushing initial wal-e backup."
     setuser postgres wal-e backup-push $PGDATA
+  else
+    logger "Running from wal-e base backup: ${last_backup}"
   fi
 }
 
