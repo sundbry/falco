@@ -1,112 +1,146 @@
 #!/bin/bash
-set -e
 
 POSTGRESQL_CONF=/etc/service/postgres/postgresql.conf
 
-function check_base_backup {
-  logger "Checking base backup"
-  last_backup=$(setuser postgres wal-e backup-list | tail -n 1)
-  echo $last_backup | grep last_modified > /dev/null 2>&1
-  backup_not_present=$?
+function create_base_backup {
+  logger "Creating wal-e base backup"
+  setuser postgres wal-e backup-push $PGDATA
+}
 
-  if [ $backup_not_present ]; then
-    logger "No backup present, pushing initial wal-e backup."
-    setuser postgres wal-e backup-push $PGDATA
+function check_base_backup {
+  logger "Checking wal-e base backup"
+  last_backup=$(setuser postgres wal-e backup-list | grep -v last_modified | tail -n 1)
+
+  if [ -z "$last_backup" ]; then
+    create_base_backup
   else
     logger "Running from wal-e base backup: ${last_backup}"
   fi
 }
 
-function start_postgres {
+function defer_check_base_backup {
+  let ready=1
+  while [ $ready -ne 0 ]; do
+    sleep 1
+    pg_isready -U $POSTGRES_USER
+    ready=$?
+  done
+  check_base_backup
+}
+
+function postgres_common_init {
   mkdir -p "$PGDATA"
   chmod 700 "$PGDATA"
   chown -R postgres "$PGDATA"
 
   chmod g+s /run/postgresql
   chown -R postgres /run/postgresql
+}
 
-  # look specifically for PG_VERSION, as it is expected in the DB dir
-  if [ ! -s "$PGDATA/PG_VERSION" ]; then
-    eval "setuser postgres initdb $POSTGRES_INITDB_ARGS"
+# Initialize a new database
+function init_postgres {
+  postgres_common_init
+  eval "setuser postgres initdb $POSTGRES_INITDB_ARGS"
 
-    # check password first so we can output the warning before postgres
-    # messes it up
-    if [ "$POSTGRES_PASSWORD" ]; then
-      pass="PASSWORD '$POSTGRES_PASSWORD'"
-      authMethod=md5
-    else
-      # The - option suppresses leading tabs but *not* spaces. :)
-      cat >&2 <<-'EOWARN'
-        ****************************************************
-        WARNING: No password has been set for the database.
-                 This will allow anyone with access to the
-                 Postgres port to access your database. In
-                 Docker's default configuration, this is
-                 effectively any other container on the same
-                 system.
+  # check password first so we can output the warning before postgres
+  # messes it up
+  if [ "$POSTGRES_PASSWORD" ]; then
+    pass="PASSWORD '$POSTGRES_PASSWORD'"
+    authMethod=md5
+  else
+    # The - option suppresses leading tabs but *not* spaces. :)
+    cat >&2 <<-'EOWARN'
+      ****************************************************
+      WARNING: No password has been set for the database.
+               This will allow anyone with access to the
+               Postgres port to access your database. In
+               Docker's default configuration, this is
+               effectively any other container on the same
+               system.
 
-                 Use "-e POSTGRES_PASSWORD=password" to set
-                 it in "docker run".
-        ****************************************************
+               Use "-e POSTGRES_PASSWORD=password" to set
+               it in "docker run".
+      ****************************************************
 EOWARN
 
-      pass=
-      authMethod=trust
-    fi
+    pass=
+    authMethod=trust
+  fi
 
-    { echo; echo "host all all 0.0.0.0/0 $authMethod"; } >> "$PGDATA/pg_hba.conf"
+  { echo; echo "host all all 0.0.0.0/0 $authMethod"; } >> "$PGDATA/pg_hba.conf"
 
-    # internal start of server in order to allow set-up using psql-client		
-    # does not listen on external TCP/IP and waits until start finishes
-    setuser postgres pg_ctl -D "$PGDATA" \
-      -o "-c listen_addresses='localhost'" \
-      -w start
+  # internal start of server in order to allow set-up using psql-client		
+  # does not listen on external TCP/IP and waits until start finishes
+  setuser postgres pg_ctl -D "$PGDATA" \
+    -o "-c listen_addresses='localhost'" \
+    -w start
 
-    : ${POSTGRES_USER:=postgres}
-    : ${POSTGRES_DB:=$POSTGRES_USER}
-    export POSTGRES_USER POSTGRES_DB
+  : ${POSTGRES_USER:=postgres}
+  : ${POSTGRES_DB:=$POSTGRES_USER}
+  export POSTGRES_USER POSTGRES_DB
 
-    psql=( psql -v ON_ERROR_STOP=1 )
+  psql=( psql -v ON_ERROR_STOP=1 )
 
-    if [ "$POSTGRES_DB" != 'postgres' ]; then
-      "${psql[@]}" --username postgres <<-EOSQL
-        CREATE DATABASE "$POSTGRES_DB" ;
-EOSQL
-      echo
-    fi
-
-    if [ "$POSTGRES_USER" = 'postgres' ]; then
-      op='ALTER'
-    else
-      op='CREATE'
-    fi
+  if [ "$POSTGRES_DB" != 'postgres' ]; then
     "${psql[@]}" --username postgres <<-EOSQL
-      $op USER "$POSTGRES_USER" WITH SUPERUSER $pass ;
+      CREATE DATABASE "$POSTGRES_DB" ;
 EOSQL
-    echo
-
-    psql+=( --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" )
-
-    setuser postgres pg_ctl -D "$PGDATA" -m fast -w stop
-
-    echo
-    echo 'PostgreSQL init process complete; ready for start up.'
     echo
   fi
 
-  check_base_backup
+  if [ "$POSTGRES_USER" = 'postgres' ]; then
+    op='ALTER'
+  else
+    op='CREATE'
+  fi
+  "${psql[@]}" --username postgres <<-EOSQL
+    $op USER "$POSTGRES_USER" WITH SUPERUSER $pass ;
+EOSQL
+  echo
+
+  psql+=( --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" )
+
+  setuser postgres pg_ctl -D "$PGDATA" -m fast -w stop
+
+  logger 'PostgreSQL init process complete.'
+}
+
+# Launch postgres
+function start_postgres {
+  if [ ! -s "$PGDATA/PG_VERSION" ]; then
+    init_postgres
+  else
+    postgres_common_init
+  fi
+
+  defer_check_base_backup &
 
   exec setuser postgres "$@"
 }
 
-sleep 3 # Let syslogd start up
+# Fuction for running as a job, with script as entrypoint
+function run_once {
+  # Disable normal process
+  touch /etc/service/postgres/down
 
-if [ "${1:0:1}" = '-' ]; then
-  set -- postgres "$@"
-fi
+  # Initialize system
+  /sbin/my_init &
+  sleep 5
+
+  $@
+  RESULT=$?
+
+  # Flush syslog
+  sv stop syslog-ng
+  sleep 1
+  exit $RESULT
+}
 
 if [ -z "$1" ]; then
+  sleep 3 # Let syslogd start up
   start_postgres "postgres" "-c" "config_file=${POSTGRESQL_CONF}"
+elif [ "$1" = "init" ]; then
+  run_once "init_postgres"
 else
   exec "$@"
 fi
