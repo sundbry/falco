@@ -44,6 +44,8 @@ spec:
         - name: SERVICE-volume
           hostPath:
             path: HOST_VOLUME_PATH
+      imagePullSecrets:
+        - name: docker
       restartPolicy: Never
       nodeSelector:
         ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
