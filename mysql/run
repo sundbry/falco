@@ -1,2 +1,56 @@
 #!/bin/bash
-mysqld
+
+MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD:-mysql}"
+
+function init_common {
+  cp -f $MY_CNF /etc/mysql/my.cnf
+}
+
+# Stop MySQL daemon
+function stop_mysql {
+  mysqladmin -u root -p"$MYSQL_ROOT_PASSWORD" shutdown
+}
+
+# Initialize a new database
+function init_mysql {
+  init_common
+  mysql_install_db
+  mysqld_safe --syslog &
+  sleep 10
+  # Set the root password
+  mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+  stop_mysql
+}
+
+# Start MySQL daemon
+function start_mysql {
+  init_common
+  trap stop_mysql EXIT
+  mysqld_safe --syslog
+}
+
+function run_once {
+  # Disable normal process
+  touch /etc/service/mysql/down
+
+  # Initialize system
+  /sbin/my_init &
+  sleep 5
+
+  $@
+  RESULT=$?
+
+  # Flush syslog
+  sv stop syslog-ng
+  sleep 1
+  exit $RESULT
+}
+
+if [ -z "$1" ]; then
+  sleep 3 # Let syslogd start up
+  start_mysql
+elif [ "$1" = "init" ]; then
+  run_once "init_mysql"
+else
+  exec "$@"
+fi
