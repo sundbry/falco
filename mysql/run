@@ -19,6 +19,8 @@ function init_mysql {
   sleep 10
   # Set the root password
   mysqladmin -u root password "$MYSQL_ROOT_PASSWORD"
+  # Allow root from remote hosts
+  mysql -p"$MYSQL_ROOT_PASSWORD" <<< "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';"
   stop_mysql
 }
 
