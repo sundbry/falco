@@ -1,0 +1,4 @@
+#!/bin/bash
+
+sleep 3 # Wait for syslog-ng
+php5-fpm -F -c $PHP_INI -y $PHP_FPM_CONF
