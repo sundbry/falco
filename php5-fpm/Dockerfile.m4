@@ -2,7 +2,6 @@ FROM REPOSITORY/nginx
 
 RUN apt-get -q update && apt-get -q -y install php5 php5-fpm php5-gd php5-pgsql php-pear php5-mysql php5-mcrypt php5-xcache php5-xmlrpc
 
-VOLUME /var/www/html
 WORKDIR /var/www/html
 EXPOSE 9000
 
