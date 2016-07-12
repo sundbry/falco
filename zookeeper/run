@@ -18,4 +18,6 @@ m4 -I $ZOOCFGDIR \
 # Put log4j.properties in the right place
 cp -f $LOG4J_PROPERTIES_PATH ${ZOOCFGDIR}/log4j.properties
 
-/opt/zookeeper/bin/zkServer.sh start-foreground
+chown -R zookeeper:zookeeper $ZOODATA
+
+setuser zookeeper /opt/zookeeper/bin/zkServer.sh start-foreground

@@ -15,10 +15,10 @@ ENV ZOOCFGDIR /etc/service/zookeeper
 
 EXPOSE 2181 2888 3888
 
-RUN apt-get update
-RUN apt-get install -y python
+RUN apt-get update && apt-get install -y python
 # https://www.apache.org/mirrors/dist.html
 RUN curl -fL http://www.us.apache.org/dist/zookeeper/stable/zookeeper-3.4.8.tar.gz | tar xzf - -C /opt && mv /opt/zookeeper-3.4.8 /opt/zookeeper
+RUN useradd -d /etc/service/zookeeper zookeeper
 
 VOLUME /tmp/zookeeper
 RUN mkdir -p /etc/service/zookeeper
