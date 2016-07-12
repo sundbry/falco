@@ -44,6 +44,8 @@ spec:
             - name: SERVICE-secret
               mountPath: /etc/service/kafka/secret
               readOnly: true
+            - name: logs
+              mountPath: /usr/local/kafka/logs
       imagePullSecrets:
         - name: docker
       volumes:
@@ -53,5 +55,7 @@ spec:
         - name: SERVICE-secret
           secret:
             secretName: SERVICE
+        - name: logs
+          emptyDir:
       nodeSelector:
         ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
