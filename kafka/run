@@ -8,4 +8,5 @@ m4 -DBROKER_ID=$BROKER_ID \
   > /etc/service/kafka/server.properties
 
 export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:${LOG4J_PROPERTIES_PATH}"
-/usr/local/kafka/bin/kafka-server-start.sh /etc/service/kafka/server.properties
+chown -R kafka:kafka $KAFKA_LOG_DIRS # Temporary fix to chown dirs owned by root, change this line to non recursive after it's deployed
+setuser kafka /usr/local/kafka/bin/kafka-server-start.sh /etc/service/kafka/server.properties

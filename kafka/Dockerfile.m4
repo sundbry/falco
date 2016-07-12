@@ -11,6 +11,7 @@ ENV KAFKA_HEAP_OPTS "-Xmx1G -Xms1G"
 
 WORKDIR /usr/local/kafka
 RUN curl -fSL http://www.us.apache.org/dist/kafka/0.9.0.1/kafka_2.11-0.9.0.1.tgz | tar -xz --strip-components=1
+RUN useradd -d /usr/local/kafka kafka
 
 RUN mkdir -p /etc/service/kafka
 ADD server.properties.m4 /etc/service/kafka/
