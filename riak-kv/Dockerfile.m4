@@ -16,11 +16,12 @@ ADD basho.list /etc/apt/sources.list.d/basho.list
 RUN apt-get update -y -q -q && apt-get install -y -q -q riak=2.1.4-1 jq
 
 # Setup the Riak service
-RUN mkdir -p /etc/service/riak
+RUN mkdir -p /etc/service/riak /usr/local/lib/riak/user
 ADD run /etc/service/riak/
 RUN chmod 0755 /etc/service/riak/run
 
 # Add the config template
 ADD riak.conf.m4 /etc/service/riak/riak.conf.m4
+ADD advanced.config /etc/riak/advanced.config
 
 WORKDIR /etc/service/riak

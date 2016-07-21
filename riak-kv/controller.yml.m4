@@ -1,10 +1,10 @@
 define(`NAME', ifelse(PROFILE, `',
                  SERVICE-CONTROLLER_TAG,
-                 SERVICE-PROFILE-CONTROLLER_TAG))
+                 SERVICE-PROFILE-CONTROLLER_TAG))dnl
 dnl Subdomain must match an existing Kubernetes service
-define(`RIAK_CLUSTER_SUBDOMAIN', SERVICE)
-define(`RIAK_NODE_HOSTNAME', SERVICE-PROFILE)
-define(`RIAK_NODE_NAME', riak@RIAK_NODE_HOSTNAME.RIAK_CLUSTER_SUBDOMAIN.RIAK_CLUSTER_DOMAIN)
+define(`RIAK_CLUSTER_SUBDOMAIN', SERVICE)dnl
+define(`RIAK_NODE_HOSTNAME', SERVICE-PROFILE)dnl
+define(`RIAK_NODE_NAME', riak@RIAK_NODE_HOSTNAME.RIAK_CLUSTER_SUBDOMAIN.RIAK_CLUSTER_DOMAIN)dnl
 kind: ReplicationController
 apiVersion: v1
 metadata:
@@ -49,6 +49,8 @@ spec:
           volumeMounts:
             - name: NAME-data
               mountPath: /var/lib/riak
+            - name: NAME-user-modules
+              mountPath: /usr/local/lib/riak/user
           livenessProbe:
             httpGet:
               path: /ping
@@ -61,10 +63,20 @@ spec:
               path: /ping
               port: 8098
 
+        # Reference: https://github.com/kubernetes/kubernetes/blob/release-1.3/examples/javaweb-tomcat-sidecar/README.md
+        - name: user-ebin
+          image: USER_EBIN_IMAGE
+          command: ["sh", "-c", "USER_EBIN_EXPORT && echo Modules ready && sleep infinity"]
+          volumeMounts:
+            - name: NAME-user-modules
+              mountPath: /out
+
       volumes:
         - name: NAME-data
           hostPath:
             path: HOST_VOLUME_PATH
+        - name: NAME-user-modules
+          emptyDir: {}
       imagePullSecrets:
         - name: docker
       nodeSelector:
