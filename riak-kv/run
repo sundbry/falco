@@ -56,4 +56,10 @@ else
   fi
 fi
 
+function stop_riak {
+  riak stop
+}
+
+trap stop_riak EXIT
+
 sleep infinity
