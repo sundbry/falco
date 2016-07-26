@@ -1,4 +1,5 @@
 define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
+define(KAFKA_HOSTNAME, SERVICE-PROFILE)
 kind: ReplicationController
 apiVersion: v1
 metadata:
@@ -21,6 +22,7 @@ spec:
         profile: "PROFILE"
       annotations:
         pod.beta.kubernetes.io/subdomain: SERVICE
+        pod.beta.kubernetes.io/hostname: KAFKA_HOSTNAME
     spec:
       containers:
         - name: SERVICE
