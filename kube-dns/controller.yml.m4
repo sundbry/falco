@@ -25,10 +25,10 @@ spec:
         image: gcr.io/google_containers/etcd-amd64:2.2.1
         resources:
           limits:
-            cpu: 100m
-            memory: 500Mi
+            cpu: 200m
+            memory: 750Mi
           requests:
-            cpu: 100m
+            cpu: 200m
             memory: 50Mi
         command:
         - /usr/local/bin/etcd
@@ -51,12 +51,12 @@ spec:
           # guaranteed class. Currently, this container falls into the
           # "burstable" category so the kubelet doesn't backoff from restarting it.
           limits:
-            cpu: 100m
+            cpu: 200m
             # Kube2sky watches all pods.
-            memory: 200Mi
+            memory: 500Mi
           requests:
-            cpu: 100m
-            memory: 50Mi
+            cpu: 200m
+            memory: 100Mi
         livenessProbe:
           httpGet:
             path: /healthz
@@ -87,11 +87,11 @@ spec:
           # guaranteed class. Currently, this container falls into the
           # "burstable" category so the kubelet doesn't backoff from restarting it.
           limits:
-            cpu: 100m
-            memory: 200Mi
+            cpu: 200m
+            memory: 500Mi
           requests:
-            cpu: 100m
-            memory: 50Mi
+            cpu: 200m
+            memory: 100Mi
         env:
           - name: `SKYDNS_NAMESERVERS'
             value: "SKYDNS_NAMESERVERS"
