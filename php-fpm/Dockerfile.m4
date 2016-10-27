@@ -1,11 +1,11 @@
 FROM REPOSITORY/nginx
 
-RUN apt-get -q update && apt-get -q -y install php5 php5-dev php5-fpm php5-gd php5-pgsql php-pear php5-mysql php5-mcrypt php5-xcache php5-xmlrpc php5-curl
+RUN apt-get -q update && apt-get -q -y install php php-dev php-fpm php-gd php-pgsql php-pear php-mysql php-mcrypt php-xmlrpc php-curl
 
 RUN cd /home/app \
   && setuser app bash -c "git clone -b 0.9.1 git@github.com:edenhill/librdkafka.git && cd librdkafka && ./configure && make" \
   && make -C librdkafka install \
-  && setuser app bash -c "git clone -b 0.9.1-php5 https://github.com/arnaud-lb/php-rdkafka.git && cd php-rdkafka && phpize && ./configure && make all" \
+  && setuser app bash -c "git clone -b 0.9.1-php7 https://github.com/arnaud-lb/php-rdkafka.git && cd php-rdkafka && phpize && ./configure && make all" \
   && make -C php-rdkafka install
 
 EXPOSE 9000
