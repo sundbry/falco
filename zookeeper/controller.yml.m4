@@ -52,7 +52,7 @@ spec:
               readOnly: true
           livenessProbe:
             exec:
-              command: ["sh", "-c", "echo stat | nc $(hostname -i) 2181 | grep Mode"]
+              command: ["sh", "-c", "echo ruok | nc $(hostname -i) 2181 | grep imok"]
             initialDelaySeconds: 15
             periodSeconds: 15
             timeoutSeconds: 5
