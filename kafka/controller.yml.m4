@@ -50,6 +50,15 @@ spec:
               readOnly: true
             - name: logs
               mountPath: /usr/local/kafka/logs
+          livenessProbe:
+            exec:
+              command: ["nc", "-z", "localhost", "9092"]
+            initialDelaySeconds: 15
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            exec:
+              command: ["nc", "-z", "localhost", "9092"]
       imagePullSecrets:
         - name: docker
       volumes:
