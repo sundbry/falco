@@ -131,3 +131,6 @@ zookeeper.connect=ZOOKEEPER_CONNECT
 
 # Timeout in ms for connecting to zookeeper
 zookeeper.connection.timeout.ms=6000
+
+inter.broker.protocol.version=0.9.0.0
+log.message.format.version=0.9.0.0
