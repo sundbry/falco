@@ -10,7 +10,7 @@ ENV KAFKA_LOG_DIRS /tmp/kafka-logs
 ENV KAFKA_HEAP_OPTS "-Xmx1G -Xms1G"
 
 WORKDIR /usr/local/kafka
-RUN curl -fSL https://www.apache.org/dyn/closer.cgi?path=/kafka/0.10.1.0/kafka_2.11-0.10.1.0.tgz | tar -xz --strip-components=1
+RUN curl -fSL http://apache.mirrors.pair.com/kafka/0.10.1.0/kafka_2.11-0.10.1.0.tgz | tar -xz --strip-components=1
 RUN useradd -d /usr/local/kafka kafka
 
 RUN mkdir -p /etc/service/kafka

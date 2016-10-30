@@ -40,6 +40,8 @@ spec:
               value: /etc/service/kafka/secret/log4j.properties
             - name: SERVER_PROPERTIES_M4_PATH
               value: /etc/service/kafka/secret/server.properties.m4
+            - name: KAFKA_HEAP_OPTS 
+              value: "-Xmx1G -Xms1G"
           volumeMounts:
             - name: SERVICE-volume-BROKER_ID
               mountPath: /var/local
