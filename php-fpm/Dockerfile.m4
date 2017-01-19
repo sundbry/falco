@@ -10,10 +10,10 @@ RUN cd /home/app \
 
 EXPOSE 9000
 
-ENV PHP_INI /etc/service/php-fpm/php.ini
-ENV PHP_FPM_CONF /etc/service/php-fpm/php-fpm.conf
+ENV PHP_INI_SCAN_DIR=/etc/service/php-fpm/conf.d PHP_INI=/etc/service/php-fpm/php.ini PHP_FPM_CONF=/etc/service/php-fpm/php-fpm.conf
 
-RUN mkdir -p /etc/service/php-fpm
+# Add extra ini files in your image to conf.d
+RUN mkdir -p /etc/service/php-fpm/conf.d
 ADD php.ini /etc/service/php-fpm/php.ini
 ADD php-fpm.conf /etc/service/php-fpm/php-fpm.conf
 ADD pool.d /etc/service/php-fpm/pool.d
