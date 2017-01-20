@@ -18,5 +18,8 @@ m4 -DBROKER_ID=$BROKER_ID \
 export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:${LOG4J_PROPERTIES_PATH}"
 chown -R kafka:kafka $KAFKA_LOG_DIRS # Temporary fix to chown dirs owned by root, change this line to non recursive after it's deployed
 
+# Safeguard against concurrent filesystem access pod restarts. Do not want a terminating pod and a concurrent respawned pod to conflict over shared files.
+sleep 10
+
 trap stop_kafka EXIT
 start_kafka
