@@ -27,7 +27,7 @@ RUN mkdir /usr/local/venv \
   && setuser postgres /bin/bash -c "\
   virtualenv /usr/local/venv \
   && source /usr/local/venv/bin/activate \
-  && pip install pyopenssl ndg-httpsclient pyasn1 wal-e \
+  && pip install pyopenssl ndg-httpsclient pyasn1 wal-e==0.9.2 \
   && deactivate"
 
 ADD wal-e /usr/local/bin/wal-e
