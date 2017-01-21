@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: REPOSITORY/SERVICE:CONTAINER_TAG
+          image: IMAGE
           ports:
             - containerPort: 4369
             - containerPort: 8087
