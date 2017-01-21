@@ -9,7 +9,7 @@ VOLUME /var/lib/riak
 VOLUME /var/log/riak
 
 # Install Riak
-RUN curl https://packagecloud.io/gpg.key | sudo apt-key add -
+RUN curl https://packagecloud.io/gpg.key | apt-key add -
 RUN apt-get install -y apt-transport-https
 ADD basho.list /etc/apt/sources.list.d/basho.list
 # Install jq for scripts
