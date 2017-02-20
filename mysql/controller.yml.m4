@@ -30,10 +30,22 @@ spec:
           env: 
             - name: `MYSQL_ROOT_PASSWORD' # Superuser password
               value: "MYSQL_ROOT_PASSWORD"
+            - name: `MYSQL_BACKUP_S3CFG'
+              value: "/etc/service/mysql/secret/s3cfg"
+            - name: `MYSQL_BACKUP_S3_PREFIX'
+              value: "MYSQL_BACKUP_S3_PREFIX"
+            - name: `MYSQL_BACKUP_INTERVAL'
+              value: "60"
           volumeMounts:
+            - name: SERVICE-secret
+              mountPath: /etc/service/mysql/secret
+              readOnly: true
             - name: SERVICE-volume
               mountPath: /var/lib/mysql
       volumes:
+        - name: SERVICE-secret
+          secret:
+            secretName: SERVICE
         - name: SERVICE-volume
           hostPath:
             path: HOST_VOLUME_PATH

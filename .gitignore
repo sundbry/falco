@@ -3,3 +3,5 @@
 */*.yml
 */Dockerfile
 .DS_Store
+mysql/*/
+mysql/s3cfg
