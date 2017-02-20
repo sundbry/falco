@@ -1,0 +1,19 @@
+#!/bin/bash
+
+cd /home/app/kafka-rest
+m4 \
+  -DPROXY_ID=$(hostname -f) \
+  -DZOOKEEPER_CONNECT=${ZOOKEEPER_CONNECT} \
+  /etc/service/kafka-rest/kafka-rest.properties.m4 \
+  > /etc/service/kafka-rest/kafka-rest.properties
+
+
+export KAFKAREST_LOG4J_OPTS="-Dlog4j.configuration=file:/etc/service/kafka-rest/log4j.properties"
+
+function stop_server {
+  setuser app ./bin/kafka-rest-stop
+}
+
+trap stop_server EXIT
+
+setuser app ./bin/kafka-rest-start /etc/service/kafka-rest/kafka-rest.properties

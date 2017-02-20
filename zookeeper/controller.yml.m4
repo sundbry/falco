@@ -30,7 +30,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: REPOSITORY/SERVICE:CONTAINER_TAG 
+          image: IMAGE
           ports:
             - containerPort: 2181
             - containerPort: 2888
@@ -50,12 +50,13 @@ spec:
             - name: SERVICE-secret
               mountPath: /etc/service/zookeeper/secret
               readOnly: true
-          livenessProbe:
-            exec:
-              command: ["sh", "-c", "echo ruok | nc $(hostname -i) 2181 | grep imok"]
-            initialDelaySeconds: 15
-            periodSeconds: 15
-            timeoutSeconds: 5
+          # Zookeepers respawning is dangerous - it can rapidly snowball into a wholecluster failure scenario when the dns keeps changing and nothing can stabilize
+          #livenessProbe:
+          #  exec:
+          #    command: ["sh", "-c", "echo ruok | nc $(hostname -i) 2181 | grep imok"]
+          #  initialDelaySeconds: 15
+          #  periodSeconds: 15
+          #  timeoutSeconds: 5
       volumes:
         - name: SERVICE-volume-ZK_ID
           hostPath:
