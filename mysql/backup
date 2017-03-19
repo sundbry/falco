@@ -1,0 +1,11 @@
+#!/bin/bash
+
+export MYSQL_PWD=$MYSQL_ROOT_PASSWORD
+
+sleep $MYSQL_BACKUP_INTERVAL
+OUT=$(mktemp)
+mysqldump -u root --all-databases --add-drop-table --force > $OUT
+gzip $OUT
+S3_PATH=$(hostname -f)/backup-$(date +"%F:%T").sql.gz
+s3cmd -c $MYSQL_BACKUP_S3CFG put $OUT.gz "${MYSQL_BACKUP_S3_PREFIX}/${S3_PATH}"
+rm -f $OUT
