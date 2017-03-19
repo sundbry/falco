@@ -1,0 +1,17 @@
+#!/bin/bash
+
+netstat -tnl | grep 3888
+if [ ! $? ]; then
+  ps aux | grep zookeeper
+  echo "Zookeeper leader election died!"
+  exit 1
+fi
+
+netstat -tnl | grep 2888
+if [ ! $? ]; then
+  ps aux | grep zookeeper
+  echo "Zookeeper died!"
+  exit 1
+fi
+
+echo "Zookeeper OK"

@@ -51,12 +51,9 @@ spec:
               mountPath: /etc/service/zookeeper/secret
               readOnly: true
           # Zookeepers respawning is dangerous - it can rapidly snowball into a wholecluster failure scenario when the dns keeps changing and nothing can stabilize
-          #livenessProbe:
-          #  exec:
-          #    command: ["sh", "-c", "echo ruok | nc $(hostname -i) 2181 | grep imok"]
-          #  initialDelaySeconds: 15
-          #  periodSeconds: 15
-          #  timeoutSeconds: 5
+          livenessProbe:
+            exec:
+              command: ["/etc/service/zookeeper/health"]
       volumes:
         - name: SERVICE-volume-ZK_ID
           hostPath:
