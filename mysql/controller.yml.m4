@@ -34,8 +34,6 @@ spec:
               value: "/etc/service/mysql/secret/s3cfg"
             - name: `MYSQL_BACKUP_S3_PREFIX'
               value: "MYSQL_BACKUP_S3_PREFIX"
-            - name: `MYSQL_BACKUP_INTERVAL'
-              value: "60"
           volumeMounts:
             - name: SERVICE-secret
               mountPath: /etc/service/mysql/secret
