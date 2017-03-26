@@ -14,7 +14,7 @@ function stop_mysql {
 # Initialize a new database
 function init_mysql {
   init_common
-  mysql_install_db
+  mysqld --initialize-insecure
   mysqld_safe --syslog &
   sleep 10
   # Set the root password
