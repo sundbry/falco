@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd ${REDIS_DATA:-/home/app}
+setuser app redis-server ${REDIS_CONF:-/etc/service/redis/redis.conf}
