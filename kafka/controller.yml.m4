@@ -1,5 +1,6 @@
 define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
 define(KAFKA_HOSTNAME, SERVICE-PROFILE)
+define(INITIAL_LIVE_DELAY_SECONDS, ifelse(INITIAL_LIVE_DELAY_SECONDS, `', `15', INITIAL_LIVE_DELAY_SECONDS))
 kind: ReplicationController
 apiVersion: v1
 metadata:
@@ -53,7 +54,7 @@ spec:
           livenessProbe:
             exec:
               command: ["nc", "-z", "localhost", "9092"]
-            initialDelaySeconds: 15
+            initialDelaySeconds: INITIAL_LIVE_DELAY_SECONDS
             periodSeconds: 15
             timeoutSeconds: 5
           readinessProbe:
