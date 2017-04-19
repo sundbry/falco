@@ -42,18 +42,18 @@ else
   if [ $? -eq 0 ]; then
     echo "Already a member of the cluster at $RIAK_CLUSTER_JOIN"
   else
-    echo "Joining the cluster at $RIAK_CLUSTER_JOIN"
-    riak-admin cluster join $RIAK_CLUSTER_JOIN
-    if [ $? -ne 0 ]; then
-      echo "Failed to join cluster! Aborting."
-      exit 1
-    fi
+    echo "Joining the cluster at $RIAK_CLUSTER_JOIN with:"
+    echo "riak-admin cluster join $RIAK_CLUSTER_JOIN"
+    #if [ $? -ne 0 ]; then
+    #  echo "Failed to join cluster! Aborting."
+    #  exit 1
+    #fi
   fi
   riak-admin cluster status
   # If the last to join, (re)commit the cluster.
-  if riak-admin member-status | egrep "joining|valid" | wc -l | grep -q "$RIAK_CLUSTER_SIZE"; then
-      riak-admin cluster plan && riak-admin cluster commit
-  fi
+  #if riak-admin member-status | egrep "joining|valid" | wc -l | grep -q "$RIAK_CLUSTER_SIZE"; then
+  #    riak-admin cluster plan && riak-admin cluster commit
+  #fi
 fi
 
 function stop_riak {
