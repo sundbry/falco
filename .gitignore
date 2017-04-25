@@ -3,5 +3,6 @@
 */*.yml
 */Dockerfile
 .DS_Store
+mediawiki/LocalSettings.php
 mysql/*/
 mysql/s3cfg
