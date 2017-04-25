@@ -2,7 +2,8 @@ FROM REPOSITORY/php-fpm
 
 RUN mkdir /var/www/mediawiki \
   && curl -fL https://releases.wikimedia.org/mediawiki/1.28/mediawiki-1.28.1.tar.gz | tar -xz --strip-components=1 -C /var/www/mediawiki \
-  && chown -R www-data:www-data /var/www/mediawiki
+  && chown -R www-data:www-data /var/www/mediawiki \
+	&& ln -s /var/www/mediawiki /var/www/mediawiki/wiki
 
 ADD nginx-default.conf /etc/service/nginx/nginx.conf
 
