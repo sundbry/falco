@@ -1,0 +1,5 @@
+#!/bin/bash
+
+rm -f /var/www/mediawiki/LocalSettings.php
+ln -s $LOCALSETTINGS_PHP /var/www/mediawiki/LocalSettings.php
+sleep infinity
