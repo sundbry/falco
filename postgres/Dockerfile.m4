@@ -1,13 +1,15 @@
 # vim:set ft=dockerfile:
 # Derived from https://github.com/docker-library/postgres/tree/04b1d366d51a942b88fff6c62943f92c7c38d9b6/9.5
-FROM REPOSITORY/pypy
+FROM REPOSITORY/base
 
 # explicitly set user/group IDs
 RUN groupadd -r postgres --gid=999 && useradd -r -g postgres --uid=999 postgres
 
 # make the "en_US.UTF-8" locale so postgres will be utf-8 enabled by default
-RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
-	&& localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+RUN apt-get update -q && \
+  apt-get install -y -q locales && \
+  rm -rf /var/lib/apt/lists/* && \
+	localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.utf8
 
 ENV PG_MAJOR 9.5
@@ -16,18 +18,20 @@ RUN apt-key adv --keyserver ha.pool.sks-keyservers.net --recv-keys B97B0AFCAA1A4
 
 RUN apt-get update -q \
 	&& apt-get install -y \
+    python3 python3-pip \
     postgresql-common \
 		postgresql-$PG_MAJOR \
 		postgresql-contrib-$PG_MAJOR \
     lzop pv \
-  && sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf 
+  && sed -ri 's/#(create_main_cluster) .*$/\1 = false/' /etc/postgresql-common/createcluster.conf \
+  && pip3 install virtualenv
 
 RUN mkdir /usr/local/venv \
   && chown postgres /usr/local/venv \
   && setuser postgres /bin/bash -c "\
   virtualenv /usr/local/venv \
   && source /usr/local/venv/bin/activate \
-  && pip install pyopenssl ndg-httpsclient pyasn1 wal-e==0.9.2 \
+  && pip3 install pyopenssl ndg-httpsclient pyasn1 wal-e[aws]==1.1.0b1 \
   && deactivate"
 
 ADD wal-e /usr/local/bin/wal-e
