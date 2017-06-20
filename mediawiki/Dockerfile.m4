@@ -12,9 +12,9 @@ RUN setuser www-data curl -fL https://extdist.wmflabs.org/dist/extensions/Lockdo
 RUN cd /var/www/mediawiki/extensions \
   && setuser www-data mkdir PrivatePageProtection \
 	&& cd PrivatePageProtection \
-  && setuser www-data wget https://phab.wmfusercontent.org/file/data/44col2ejcqwacniqvg6a/PHID-FILE-6ylbpwvjgmijh3lshj7i/PrivatePageProtection.php \
-  && setuser www-data wget https://phab.wmfusercontent.org/file/data/uymkmvaz3hjejd3lxkhi/PHID-FILE-cb22ln3oizm34nhc2jx5/PrivatePageProtection.i18n.php \
-  && setuser www-data wget https://phab.wmfusercontent.org/file/data/66pr6scembqfjesoqeb7/PHID-FILE-ieypl6nvmosyrerdh77v/PrivatePageProtection.i18n.magic.php 
+  && setuser www-data wget -q https://phabricator.wikimedia.org/diffusion/SVN/browse/trunk/extensions/PrivatePageProtection/PrivatePageProtection.php?view=raw -O PrivatePageProtection.php \
+  && setuser www-data wget -q https://phabricator.wikimedia.org/diffusion/SVN/browse/trunk/extensions/PrivatePageProtection/PrivatePageProtection.i18n.php?view=raw -O PrivatePageProtection.i18n.php \
+  && setuser www-data wget -q https://phabricator.wikimedia.org/diffusion/SVN/browse/trunk/extensions/PrivatePageProtection/PrivatePageProtection.i18n.magic.php?view=raw -O PrivatePageProtection.i18n.magic.php
 RUN setuser www-data git clone https://github.com/antonydandrea/LocalS3Repo2.git /var/www/mediawiki/extensions/LocalS3Repo
 
 ADD nginx-default.conf /etc/service/nginx/nginx.conf
