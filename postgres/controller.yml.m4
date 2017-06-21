@@ -36,7 +36,7 @@ spec:
             - name: `WALE_S3_PREFIX'
               value: WALE_S3_PREFIX
             - name: `WALE_S3_ENDPOINT'
-              value: WALE_S3_ENDPOINT
+              value: ifelse(WALE_S3_ENDPOINT, `', `', WALE_S3_ENDPOINT)
             - name: `AWS_ACCESS_KEY_ID'
               value: AWS_ACCESS_KEY_ID
             - name: `AWS_SECRET_ACCESS_KEY'
