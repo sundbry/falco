@@ -27,9 +27,10 @@ spec:
             - containerPort: 1194
               hostPort: 1194
           securityContext:
-            capabilities:
-              add:
-                - NET_ADMIN
+            privileged: true
+            #capabilities:
+            #  add:
+            #    - NET_ADMIN
           env:
             - name: `VPN_VIRTUAL_NAT'
               value: "VPN_VIRTUAL_NAT"
@@ -37,7 +38,7 @@ spec:
               value: /etc/openvpn/openvpn.conf
           volumeMounts:
             - name: SERVICE-secret
-              mountPath: /etc/openvpn
+              mountPath: /etc/service/openvpn/secret
               readOnly: true
       volumes:
         - name: SERVICE-secret

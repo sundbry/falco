@@ -2,11 +2,11 @@
 server VPN_VIRTUAL_NETWORK VPN_VIRTUAL_MASK
 
 verb 3
-key /etc/openvpn/pki/private/vpn.etheride.com.key
+key /etc/openvpn/pki/private/VPN_SERVER_NAME.key
 ca /etc/openvpn/pki/ca.crt
-cert /etc/openvpn/pki/issued/vpn.etheride.com.crt
-dh /etc/openvpn/pki/dh.pem
-tls-auth /etc/openvpn/pki/ta.key
+cert /etc/openvpn/pki/issued/VPN_SERVER_NAME.crt
+dh /etc/openvpn/dh.pem
+tls-auth /etc/openvpn/ta.key
 key-direction 0
 keepalive 10 60
 persist-key

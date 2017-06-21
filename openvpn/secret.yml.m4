@@ -4,4 +4,4 @@ metadata:
   name: SECRET
 type: Opaque
 data:
-  openvpn.conf: OPENVPN_CONF_BASE64
+  openvpn.tgz: OPENVPN_TGZ_BASE64

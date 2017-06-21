@@ -6,4 +6,4 @@
 mediawiki/LocalSettings.php
 mysql/*/
 mysql/s3cfg
-openvpn/openvpn.conf
+openvpn/openvpn.tgz
