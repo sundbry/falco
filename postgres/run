@@ -5,11 +5,22 @@ POSTGRESQL_CONF=/etc/service/postgres/postgresql.conf
 function create_base_backup {
   logger "Creating wal-e base backup"
   setuser postgres wal-e backup-push $PGDATA
+  if [ $? -eq 0 ]; then
+    logger "Trimming wal-e backups"
+    wal-e delete --confirm retain 3
+  fi
+}
+
+function get_last_backup {
+  out=$(setuser postgres wal-e backup-list LATEST | grep -v last_modified | tail -n 1)
+  logger "last backup: '$out'"
+  echo $out
 }
 
 function check_base_backup {
-  logger "Checking wal-e base backup"
-  last_backup=$(setuser postgres wal-e backup-list | grep -v last_modified | tail -n 1)
+  #logger "Checking wal-e base backup"
+  #last_backup=$(get_last_backup)
+  last_backup="" # Always create new base backup on restart
 
   if [ -z "$last_backup" ]; then
     create_base_backup
@@ -37,11 +48,7 @@ function postgres_common_init {
   chown -R postgres /run/postgresql
 }
 
-# Initialize a new database
-function init_postgres {
-  postgres_common_init
-  eval "setuser postgres initdb $POSTGRES_INITDB_ARGS"
-
+function write_pg_hba_conf {
   # check password first so we can output the warning before postgres
   # messes it up
   if [ "$POSTGRES_PASSWORD" ]; then
@@ -67,7 +74,18 @@ EOWARN
     authMethod=trust
   fi
 
+  echo "local postgres postgres trust" > "$PGDATA/hb_hba.conf"
   { echo; echo "host all all 0.0.0.0/0 $authMethod"; } >> "$PGDATA/pg_hba.conf"
+
+  echo $pass
+}
+
+# Initialize a new database
+function init_postgres {
+  postgres_common_init
+  eval "setuser postgres initdb $POSTGRES_INITDB_ARGS"
+
+  pass=$(write_pg_hba_conf)
 
   # internal start of server in order to allow set-up using psql-client		
   # does not listen on external TCP/IP and waits until start finishes
@@ -105,10 +123,24 @@ EOSQL
   logger 'PostgreSQL init process complete.'
 }
 
+function restore_postgres {
+  postgres_common_init
+  logger "Loading postgres restoration from backup"
+  setuser postgres wal-e backup-fetch $PGDATA LATEST
+  echo "restore_command = 'wal-e wal-fetch \"%f\" \"%p\"'" > $PGDATA/recovery.conf
+  chown postgres:postgres $PGDATA/recovery.conf
+  pass=$(write_pg_hba_conf)
+}
+
 # Launch postgres
 function start_postgres {
   if [ ! -s "$PGDATA/PG_VERSION" ]; then
-    init_postgres
+    last_backup=$(get_last_backup)
+    if [ -z "$last_backup" ]; then
+      init_postgres
+    else
+      restore_postgres
+    fi
   else
     postgres_common_init
   fi
@@ -135,6 +167,8 @@ function run_once {
   sleep 1
   exit $RESULT
 }
+
+trap 'kill $(jobs -p)' EXIT
 
 if [ -z "$1" ]; then
   sleep 3 # Let syslogd start up

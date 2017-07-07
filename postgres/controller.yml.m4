@@ -44,12 +44,6 @@ spec:
           volumeMounts:
             - name: SERVICE-volume
               mountPath: /var/lib/postgresql/data
-          livenessProbe:
-            exec:
-              command: ["sh", "-c", "pg_isready -U $POSTGRES_USER"]
-            initialDelaySeconds: 5
-            periodSeconds: 15
-            timeoutSeconds: 5
           readinessProbe:
             exec:
               command: ["sh", "-c", "pg_isready -U $POSTGRES_USER"]
