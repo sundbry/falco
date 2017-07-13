@@ -1,7 +1,9 @@
 FROM REPOSITORY/base
 
-WORKDIR /usr/local/src
-RUN wget https://storage.googleapis.com/golang/go1.4.2.linux-amd64.tar.gz 
-# Install to /usr/local/go, default GOROOT
-RUN tar -C /usr/local -xzf go1.4.2.linux-amd64.tar.gz 
-RUN ln -s /usr/local/go/bin/* /usr/local/bin/
+ENV GOPATH /usr/go
+ENV GOROOT /usr/lib/go
+ENV PATH $PATH:$GOPATH/bin:$GOROOT/bin
+RUN mkdir $GOPATH \
+  && mkdir $GOROOT \
+  && curl -fSL https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz | tar -C $GOROOT -xz --strip-components=1 \
+  && go version
