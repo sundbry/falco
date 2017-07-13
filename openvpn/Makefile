@@ -1,6 +1,9 @@
 .PHONY: secret $(OPENVPN_CONFIG_PATH)/openvpn.conf $(OPENVPN_CONFIG_PATH)/openvpn-client.conf openvpn.tgz 
 
 secret: openvpn.tgz $(OPENVPN_CONFIG_PATH)/openvpn-client.conf
+
+$(OPENVPN_CONFIG_PATH):
+	mkdir -p $@
 	
 $(OPENVPN_CONFIG_PATH)/openssl-1.0.cnf:
 	cp -f openssl-1.0.cnf $@
@@ -44,6 +47,6 @@ $(OPENVPN_CONFIG_PATH)/openvpn-client.conf:
 		-DOPENVPN_CONFIG_PATH=$(OPENVPN_CONFIG_PATH) \
 		openvpn-client.conf.m4 > $@
 
-openvpn.tgz: $(OPENVPN_CONFIG_PATH)/pki $(OPENVPN_CONFIG_PATH)/dh.pem $(OPENVPN_CONFIG_PATH)/ta.key $(OPENVPN_CONFIG_PATH)/openvpn.conf
+openvpn.tgz: $(OPENVPN_CONFIG_PATH) $(OPENVPN_CONFIG_PATH)/pki $(OPENVPN_CONFIG_PATH)/dh.pem $(OPENVPN_CONFIG_PATH)/ta.key $(OPENVPN_CONFIG_PATH)/openvpn.conf 
 	rm -f $@
 	tar -C $(OPENVPN_CONFIG_PATH) -czf $@ .
