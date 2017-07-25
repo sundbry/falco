@@ -1,0 +1,39 @@
+localhost:81 {
+  status 200 /status
+}
+
+{{ $backends := .Backends }}
+
+{{/* HealthCheck  */}}
+{{ .HealthzHost }}:{{ .HealthzPort }} {
+  status 200 {{ .HealthzPath }}
+}
+
+{{ range $indexServer, $server := .Servers }}
+  {{ $host := $server.Hostname | cleanHostname }}
+  {{ if ne $host "" }}
+    {{ range $indexLocation, $location := $server.Locations }}
+      {{ $host }}{{ $location.Path }} {
+        log / stdout "{combined} {upstream}"
+        tls {$ACME_EMAIL} {
+          # https://github.com/mholt/caddy/issues/189
+          alpn http/1.1
+        }
+        {{ $location.ConfigurationSnippet }}
+
+        proxy / {
+          policy round_robin
+          header_upstream -X-Forwarded-For
+
+          {{ range $indexBackend, $backend := $backends }}
+          {{ if eq $backend.Name $location.Backend }}
+          {{ range $indexEndpoint, $endpoint := $backend.Endpoints }}
+          upstream {{ $endpoint.Address }}:{{ $endpoint.Port }}
+          {{ end }}
+          {{ end }}
+          {{ end }}
+        }
+      }
+    {{ end }}
+  {{ end }}
+{{ end }}
