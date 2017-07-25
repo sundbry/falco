@@ -42,12 +42,12 @@ spec:
               mountPath: /var/log
             - name: data
               mountPath: /etc/service/caddy/data
-          #livenessProbe:
-          #      httpGet:
-          #        path: /health
-          #        port: 81
-          #      initialDelaySeconds: 600
-          #      timeoutSeconds: 1
+          livenessProbe:
+                httpGet:
+                  path: /health
+                  port: 81
+                initialDelaySeconds: 30
+                timeoutSeconds: 1
           readinessProbe:
                 httpGet:
                   path: /health
