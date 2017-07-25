@@ -3,6 +3,7 @@
 */*.yml
 */Dockerfile
 .DS_Store
+caddy/Caddyfile
 mediawiki/LocalSettings.php
 mysql/*/
 mysql/s3cfg
