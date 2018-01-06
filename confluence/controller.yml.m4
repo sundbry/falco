@@ -28,6 +28,12 @@ spec:
           env:
             - name: `CATALINA_OPTS'
               value: "CATALINA_OPTS"
+            - name: `X_PROXY_NAME'
+              value: "X_PROXY_NAME"
+            - name: `X_PROXY_PORT'
+              value: "X_PROXY_PORT"
+            - name: `X_PROXY_SCHEME'
+              value: "X_PROXY_SCHEME"
           volumeMounts:
             - name: data
               mountPath: /var/atlassian/confluence
