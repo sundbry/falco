@@ -1,7 +1,7 @@
 FROM REPOSITORY/base
 
 RUN mkdir -p /usr/local/src/redis \
-  && curl -fSL http://download.redis.io/releases/redis-3.2.8.tar.gz | tar -xz --strip-components=1 -C /usr/local/src/redis
+  && curl -fSL http://download.redis.io/releases/redis-4.0.2.tar.gz | tar -xz --strip-components=1 -C /usr/local/src/redis
 RUN cd /usr/local/src/redis \
   && make \
   && make install
