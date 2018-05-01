@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.9.18
+FROM phusion/baseimage:0.10.1
 
 ENV DEBIAN_FRONTEND noninteractive
 
