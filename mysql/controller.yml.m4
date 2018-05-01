@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: REPOSITORY/CONTAINER_NAME:CONTAINER_TAG
+          image: IMAGE
           ports:
             - containerPort: 3306
           env: 

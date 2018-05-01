@@ -3,4 +3,4 @@
 secret: s3cfg
 
 s3cfg:
-	cp -f $(ENVIRONMENT)/s3cfg $@
+	cp -f $(MYSQL_S3CFG) $@
