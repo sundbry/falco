@@ -24,7 +24,9 @@ localhost:81 {
         proxy / {
           policy round_robin
           header_upstream X-Forwarded-For {remote}
-          header_upstream +Host {host}
+          header_upstream X-Forwarded-Host {host}
+          header_upstream Host {host}
+          header_upstream Referer {>Referer}
 
           {{ range $indexBackend, $backend := $backends }}
           {{ if eq $backend.Name $location.Backend }}
