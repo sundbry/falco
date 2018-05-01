@@ -50,6 +50,10 @@ function run_once {
 
 if [ -z "$1" ]; then
   sleep 3 # Let syslogd start up
+  if [ -z "$(ls /var/lib/mysql)" ]; then
+    init_mysql
+    sleep 5
+  fi
   start_mysql
 elif [ "$1" = "init" ]; then
   run_once "init_mysql"
