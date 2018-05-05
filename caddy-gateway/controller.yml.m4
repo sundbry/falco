@@ -69,3 +69,4 @@ spec:
       nodeSelector:
         ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
       serviceAccountName: SERVICE_ACCOUNT_NAME
+      hostNetwork: true
