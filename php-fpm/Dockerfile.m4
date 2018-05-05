@@ -1,6 +1,7 @@
 FROM REPOSITORY/nginx
 
-RUN apt-get -q update && apt-get -q -y install php php-dev php-fpm php-gd php-pgsql php-pear php-mysql php-mcrypt php-xmlrpc php-curl php-mbstring php-xml
+RUN apt-get -q update && \
+  apt-get -q -y install php php-dev php-fpm php-gd php-pgsql php-pear php-mysql php-mcrypt php-xmlrpc php-curl php-mbstring php-xml
 
 RUN cd /home/app \
   && setuser app bash -c "git clone -b v0.11.4 https://github.com/edenhill/librdkafka.git && cd librdkafka && ./configure && make" \
