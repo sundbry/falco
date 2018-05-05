@@ -11,3 +11,4 @@ spec:
   selector:
     role: SERVICE
   type: ClusterIP
+  clusterIP: None
