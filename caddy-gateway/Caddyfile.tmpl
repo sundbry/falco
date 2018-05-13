@@ -27,6 +27,7 @@ localhost:81 {
           header_upstream X-Forwarded-Host {host}
           header_upstream Host {host}
           header_upstream Referer {>Referer}
+          websocket
 
           {{ range $indexBackend, $backend := $backends }}
           {{ if eq $backend.Name $location.Backend }}
