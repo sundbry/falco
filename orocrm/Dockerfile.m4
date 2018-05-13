@@ -18,8 +18,12 @@ RUN apt-get -y -q update && apt-get -y -q install php7.1-soap php7.1-tidy
 ADD nginx-default.conf /etc/service/nginx/nginx.conf
 ADD php.ini /etc/service/php-fpm/php.ini
 
-RUN bash -c "echo 'env[PATH] = /usr/local/node/bin:/usr/local/bin:/usr/bin:/bin' >> /etc/service/php-fpm/pool.d/www.conf" 
+RUN bash -c "echo 'env[PATH] = /usr/local/node/bin:/usr/local/bin:/usr/bin:/bin' >> /etc/service/php-fpm/pool.d/www.conf" && \
+  bash -c "echo 'env[HTTPS] = on' >> /etc/service/php-fpm/pool.d/www.conf" 
 
-RUN mkdir -p /etc/service/orocrm
+RUN mkdir -p /etc/service/orocrm /etc/service/orocrm-ws
 ADD run /etc/service/orocrm/run
-RUN chmod 0755 /etc/service/orocrm/run
+ADD run-websocket /etc/service/orocrm-ws/run
+RUN chmod 0755 /etc/service/orocrm/run /etc/service/orocrm-ws/run
+ADD cron /etc/service/orocrm/cron
+RUN rm -f /etc/service/cron/down && setuser www-data crontab /etc/service/orocrm/cron

@@ -1,0 +1,1 @@
+*/1 * * * * bash -c 'cd /var/www/orocrm && /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" app/console oro:cron --env=prod && touch /var/www/orocrm/cron.txt' > /dev/null

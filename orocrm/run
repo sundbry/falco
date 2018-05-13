@@ -6,7 +6,8 @@ if [ -f "$PARAMETERS_YML" ]; then
   cp -f "$PARAMETERS_YML" /var/www/orocrm/app/config/
 fi
 
-chown -R www-data:www-data /var/www/orocrm/cache
+cd /var/www/orocrm
+chown -R www-data:www-data cache
 setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console fos:js-routing:dump --target web/js/routes.js.js --env=prod
 setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console oro:localization:dump --env=prod
 setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console assets:install --env=prod
