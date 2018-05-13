@@ -16,9 +16,10 @@ RUN git clone -b 3.0.0-beta https://github.com/oroinc/crm-application.git /var/w
 RUN apt-get -y -q update && apt-get -y -q install php7.1-soap php7.1-tidy
  
 ADD nginx-default.conf /etc/service/nginx/nginx.conf
+ADD php.ini /etc/service/php-fpm/php.ini
 
-RUN echo && \
-  bash -c "echo 'php_value[memory_limit] = 1024M' >> /etc/service/php-fpm/pool.d/www.conf" && \
-  bash -c "echo 'php_value[realpath_cache_size] = 4096K' >> /etc/service/php-fpm/pool.d/www.conf" && \
-  bash -c "echo 'php_value[realpath_cache_ttl] = 600' >> /etc/service/php-fpm/pool.d/www.conf" && \
-  bash -c "echo 'env[PATH] = /usr/local/node/bin:/usr/local/bin:/usr/bin:/bin' >> /etc/service/php-fpm/pool.d/www.conf" 
+RUN bash -c "echo 'env[PATH] = /usr/local/node/bin:/usr/local/bin:/usr/bin:/bin' >> /etc/service/php-fpm/pool.d/www.conf" 
+
+RUN mkdir -p /etc/service/orocrm
+ADD run /etc/service/orocrm/run
+RUN chmod 0755 /etc/service/orocrm/run
