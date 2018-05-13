@@ -8,16 +8,19 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
+    profile: PROFILE
 spec:
   replicas: REPLICAS
   selector:
     name: NAME
     role: SERVICE
+    profile: PROFILE
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
+        profile: PROFILE
       annotations:
         pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
@@ -31,10 +34,10 @@ spec:
               mountPath: /tmp
             - name: nginx-logs
               mountPath: /var/log/nginx
-            - name: matomo-tmp
-              mountPath: /var/www/matomo/tmp
-            - name: config
-              mountPath: /var/www/matomo/config
+            - name: cache
+              mountPath: /var/www/orocrm/cache/prod
+            - name: secret
+              mountPath: /etc/service/orocrm/secret
           livenessProbe:
             httpGet:
               path: /nginx/status
@@ -48,12 +51,12 @@ spec:
       volumes:
         - name: tmp
           emptyDir:
-        - name: matomo-tmp
+        - name: cache
           emptyDir:
         - name: nginx-logs
           emptyDir:
-        - name: config
-          hostPath:
-            path: HOST_VOLUME_PATH
+        - name: secret
+          secret:
+            secretName: SERVICE-PROFILE
       imagePullSecrets:
         - name: docker
