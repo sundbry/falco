@@ -1,0 +1,5 @@
+#!/bin/bash
+
+sleep 1
+
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console clank:server --env=prod
