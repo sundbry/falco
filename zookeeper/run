@@ -1,6 +1,12 @@
 #!/bin/sh
 
-echo ${MYID:-1} > ${ZOODATA}/myid
+MYID=${HOSTNAME##*-}
+ZOODATA=${ZOODATA}/${MYID}
+
+logger "Starting Zookeeper $MYID"
+
+mkdir -p ${ZOODATA}
+echo $MYID > ${ZOODATA}/myid
 
 # server.1=...
 if [ -n "$SERVERS" ]; then

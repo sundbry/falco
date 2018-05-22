@@ -1,38 +1,28 @@
-define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
-define(KAFKA_HOSTNAME, SERVICE-PROFILE)
-define(INITIAL_LIVE_DELAY_SECONDS, ifelse(INITIAL_LIVE_DELAY_SECONDS, `', `15', INITIAL_LIVE_DELAY_SECONDS))
-kind: ReplicationController
-apiVersion: v1
+define(NAME, SERVICE)dnl
+define(INITIAL_LIVE_DELAY_SECONDS, ifelse(INITIAL_LIVE_DELAY_SECONDS, `', `15', INITIAL_LIVE_DELAY_SECONDS))dnl
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
-  labels:
-    name: NAME
-    role: SERVICE
-    profile: "PROFILE"
 spec:
-  replicas: 1 # Use profiles to replicate this controller
+  replicas: REPLICAS
+  serviceName: "SERVICE"
   selector:
-    name: NAME
-    role: SERVICE
-    profile: "PROFILE"
+    matchLabels:
+      role: "SERVICE"
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-        profile: "PROFILE"
-      annotations:
-        pod.beta.kubernetes.io/subdomain: SERVICE
-        pod.beta.kubernetes.io/hostname: KAFKA_HOSTNAME
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
         - name: SERVICE
           image: IMAGE
           ports:
             - containerPort: 9092
           env:
-            - name: `BROKER_ID'
-              value: "BROKER_ID"
             - name: `ZOOKEEPER_CONNECT'
               value: ZOOKEEPER_CONNECT
             - name: KAFKA_LOG_DIRS
@@ -44,9 +34,9 @@ spec:
             - name: KAFKA_HEAP_OPTS 
               value: "-Xmx1G -Xms1G"
           volumeMounts:
-            - name: SERVICE-volume-BROKER_ID
-              mountPath: /var/local
-            - name: SERVICE-secret
+            - name: data
+              mountPath: /var/local/kafka
+            - name: secret
               mountPath: /etc/service/kafka/secret
               readOnly: true
             - name: logs
@@ -54,7 +44,7 @@ spec:
           livenessProbe:
             exec:
               command: ["nc", "-z", "localhost", "9092"]
-            initialDelaySeconds: INITIAL_LIVE_DELAY_SECONDS
+            initialDelaySeconds: 15
             periodSeconds: 15
             timeoutSeconds: 5
           readinessProbe:
@@ -63,10 +53,10 @@ spec:
       imagePullSecrets:
         - name: docker
       volumes:
-        - name: SERVICE-volume-BROKER_ID
+        - name: data
           hostPath:
             path: HOST_VOLUME_PATH
-        - name: SERVICE-secret
+        - name: secret
           secret:
             secretName: SERVICE
         - name: logs

@@ -1,12 +1,16 @@
 #!/bin/bash
 
 function start_kafka {
+  logger "Starting Kafka broker $BROKER_ID"
   setuser kafka /usr/local/kafka/bin/kafka-server-start.sh /etc/service/kafka/server.properties
 }
 
 function stop_kafka {
   setuser kafka /usr/local/kafka/bin/kafka-server-stop.sh
 }
+
+BROKER_ID=${HOSTNAME##*-}
+KAFKA_LOG_DIRS=${KAFKA_LOG_DIRS}/${BROKER_ID}
 
 m4 -DBROKER_ID=$BROKER_ID \
   -DADVERTISED_HOST_NAME=$(hostname -f) \
@@ -16,10 +20,7 @@ m4 -DBROKER_ID=$BROKER_ID \
   > /etc/service/kafka/server.properties
 
 export KAFKA_LOG4J_OPTS="-Dlog4j.configuration=file:${LOG4J_PROPERTIES_PATH}"
-chown -R kafka:kafka $KAFKA_LOG_DIRS # Temporary fix to chown dirs owned by root, change this line to non recursive after it's deployed
-
-# Safeguard against concurrent filesystem access pod restarts. Do not want a terminating pod and a concurrent respawned pod to conflict over shared files.
-sleep 10
+chown -R kafka:kafka $KAFKA_LOG_DIRS
 
 trap stop_kafka EXIT
 start_kafka

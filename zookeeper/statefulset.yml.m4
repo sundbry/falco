@@ -1,33 +1,21 @@
-define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)
-define(`ZOOKEEPER_CLUSTER_SUBDOMAIN', SERVICE)
-define(`ZOOKEEPER_NODE_HOSTNAME', SERVICE-PROFILE)
-kind: ReplicationController
-apiVersion: v1
+define(NAME, SERVICE)
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
-  labels:
-    name: NAME
-    role: SERVICE
-    profile: "PROFILE"
-    zk-id: "ZK_ID"
 spec:
-  replicas: 1 # Do NOT replicate this controller -RS
+  replicas: REPLICAS
+  serviceName: "SERVICE"
   selector:
-    name: NAME
-    role: SERVICE
-    profile: "PROFILE"
-    zk-id: "ZK_ID"
+    matchLabels:
+      role: SERVICE
   template:
     metadata:
-      annotations:
-        pod.beta.kubernetes.io/subdomain: ZOOKEEPER_CLUSTER_SUBDOMAIN
-        pod.beta.kubernetes.io/hostname: ZOOKEEPER_NODE_HOSTNAME
       labels:
         name: NAME
         role: SERVICE
-        profile: "PROFILE"
-        zk-id: "ZK_ID"
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
         - name: SERVICE
           image: IMAGE
@@ -36,8 +24,6 @@ spec:
             - containerPort: 2888
             - containerPort: 3888
           env:
-            - name: MYID
-              value: "ZK_ID"
             - name: SERVERS
               value: ZK_NODES
             - name: LOG4J_PROPERTIES_PATH
@@ -45,20 +31,19 @@ spec:
             - name: ZOODATA
               value: /var/local/zookeeper
           volumeMounts:
-            - name: SERVICE-volume-ZK_ID
-              mountPath: /var/local
-            - name: SERVICE-secret
+            - name: data
+              mountPath: /var/local/zookeeper
+            - name: secret
               mountPath: /etc/service/zookeeper/secret
               readOnly: true
-          # Zookeepers respawning is dangerous - it can rapidly snowball into a wholecluster failure scenario when the dns keeps changing and nothing can stabilize
           livenessProbe:
             exec:
               command: ["/etc/service/zookeeper/health"]
       volumes:
-        - name: SERVICE-volume-ZK_ID
+        - name: data
           hostPath:
             path: HOST_VOLUME_PATH
-        - name: SERVICE-secret
+        - name: secret
           secret:
             secretName: SERVICE
       imagePullSecrets:
