@@ -1,11 +1,10 @@
-define(NAME, ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+define(NAME, SERVICE)dnl
 kind: Service
 apiVersion: v1
 metadata:
   name: NAME
   labels:
     name: NAME
-    ifdef(`ZK_ID', zk-id: "ZK_ID")
 spec:
   ports:
     - port: 2181
@@ -19,6 +18,5 @@ spec:
       name: zk-elect
   selector:
     role: SERVICE
-    ifdef(`ZK_ID', zk-id: "ZK_ID")
   type: ClusterIP
-  ifelse(PROXY, `true', `', `clusterIP: None')
+  clusterIP: None
