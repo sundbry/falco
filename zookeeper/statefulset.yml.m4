@@ -36,9 +36,9 @@ spec:
             - name: secret
               mountPath: /etc/service/zookeeper/secret
               readOnly: true
-          #livenessProbe:
-          #  exec:
-          #    command: ["/etc/service/zookeeper/health"]
+          livenessProbe:
+            exec:
+              command: ["/etc/service/zookeeper/health"]
       volumes:
         - name: data
           hostPath:
