@@ -1,3 +1,4 @@
+define(ZOO_VERSION, 3.4.12)dnl
 FROM REPOSITORY/jdk
 
 # Comma-separated list of hosts
@@ -17,7 +18,7 @@ EXPOSE 2181 2888 3888
 
 RUN apt-get update && apt-get install -y python net-tools netcat
 # https://www.apache.org/mirrors/dist.html
-RUN curl -fL http://www.us.apache.org/dist/zookeeper/stable/zookeeper-3.4.9.tar.gz | tar xzf - -C /opt && mv /opt/zookeeper-3.4.9 /opt/zookeeper
+RUN curl -fL http://www.us.apache.org/dist/zookeeper/stable/zookeeper-ZOO_VERSION.tar.gz | tar xzf - -C /opt && mv /opt/zookeeper-ZOO_VERSION /opt/zookeeper
 RUN useradd -d /etc/service/zookeeper zookeeper
 
 VOLUME /tmp/zookeeper
