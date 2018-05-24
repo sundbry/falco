@@ -30,6 +30,8 @@ group nogroup
 # Route server subnets
 push "route VPN_SUBNET_A_NETWORK VPN_SUBNET_A_MASK"
 push "route VPN_SUBNET_B_NETWORK VPN_SUBNET_B_MASK"
+ifelse(VPN_SUBNET_C_NETWORK, `', `',
+ push "route VPN_SUBNET_C_NETWORK VPN_SUBNET_C_MASK")
 # Provide DNS
 push "dhcp-option DOMAIN VPN_DOMAIN"
 push "dhcp-option DOMAIN-SEARCH VPN_DOMAIN"
