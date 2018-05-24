@@ -8,16 +8,19 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
+    profile: PROFILE
 spec:
   replicas: 1
   selector:
     name: NAME
     role: SERVICE
+    profile: PROFILE
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
+        profile: PROFILE
       annotations:
         pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
@@ -39,6 +42,8 @@ spec:
               value: "MB_DB_PASS"
             - name: `MB_DB_HOST'
               value: "MB_DB_HOST"
+            - name: `JAVA_TIMEZONE'
+              value: "JAVA_TIMEZONE"
           volumeMounts:
             - name: tmp
               mountPath: /tmp
