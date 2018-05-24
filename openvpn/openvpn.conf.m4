@@ -25,10 +25,12 @@ group nogroup
 
 # Route client subnets
 # common home/office networks
-route 192.168.0.0 255.255.255.0
-route 10.0.0.0 255.255.0.0
+#route 192.168.0.0 255.255.255.0
+#route 10.0.0.0 255.255.0.0
 # Route server subnets
 push "route VPN_SUBNET_A_NETWORK VPN_SUBNET_A_MASK"
 push "route VPN_SUBNET_B_NETWORK VPN_SUBNET_B_MASK"
 # Provide DNS
+push "dhcp-option DOMAIN VPN_DOMAIN"
+push "dhcp-option DOMAIN-SEARCH VPN_DOMAIN"
 push "dhcp-option DNS VPN_DNS_SERVER"
