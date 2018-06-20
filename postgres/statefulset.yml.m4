@@ -1,8 +1,6 @@
-define(`NAME', ifelse(PROFILE, `',
-                 SERVICE-CONTROLLER_TAG,
-                 SERVICE-PROFILE-CONTROLLER_TAG))
-kind: ReplicationController
-apiVersion: v1
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
   labels:
@@ -10,16 +8,15 @@ metadata:
     role: SERVICE
 spec:
   replicas: 1 # Do NOT replicate this controller -RS
+  serviceName: SERVICE
   selector:
-    name: NAME
-    role: SERVICE
+    matchLabels:
+      role: SERVICE
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-      annotations:
-        pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
       containers:
         - name: SERVICE
@@ -42,13 +39,13 @@ spec:
             - name: `AWS_SECRET_ACCESS_KEY'
               value: AWS_SECRET_ACCESS_KEY
           volumeMounts:
-            - name: SERVICE-volume
+            - name: data
               mountPath: /var/lib/postgresql/data
           readinessProbe:
             exec:
               command: ["sh", "-c", "pg_isready -U $POSTGRES_USER"]
       volumes:
-        - name: SERVICE-volume
+        - name: data
           hostPath:
             path: HOST_VOLUME_PATH
       imagePullSecrets:
