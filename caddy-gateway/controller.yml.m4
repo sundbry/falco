@@ -43,6 +43,10 @@ spec:
           args:
             - /caddy-ingress-controller
             - --default-backend-service=DEFAULT_BACKEND_SERVICE
+          lifecycle:
+            postStart:
+              exec:
+                command: ["/bin/mkdir", "/var/log/caddy"]
           volumeMounts:
             - name: logs
               mountPath: /var/log
