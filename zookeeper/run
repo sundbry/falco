@@ -2,6 +2,7 @@
 
 MYID=${HOSTNAME##*-}
 ZOODATA=${ZOODATA}/${MYID}
+export ZOO_LOG_DIR=${ZOODATA}/logs
 
 logger "Starting Zookeeper $MYID"
 
@@ -26,4 +27,4 @@ cp -f $LOG4J_PROPERTIES_PATH ${ZOOCFGDIR}/log4j.properties
 
 chown -R zookeeper:zookeeper $ZOODATA
 
-setuser zookeeper /opt/zookeeper/bin/zkServer.sh start-foreground
+exec setuser zookeeper /opt/zookeeper/bin/zkServer.sh start-foreground
