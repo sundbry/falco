@@ -1,18 +1,15 @@
-define(NAME, ifelse(PROFILE, `', SERVICE-CONTROLLER_TAG, SERVICE-PROFILE-CONTROLLER_TAG))
-kind: ReplicationController
-apiVersion: v1
+define(NAME, ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
-  labels:
-    name: NAME
-    role: SERVICE
-    profile: "PROFILE"
 spec:
   replicas: 1
+  serviceName: NAME
   selector:
-    name: "NAME"
-    role: "SERVICE"
-    profile: "PROFILE"
+    matchLabels:
+      role: "SERVICE"
+      profile: "PROFILE"
   template:
     metadata:
       labels:
@@ -41,13 +38,19 @@ spec:
               mountPath: /opt/atlassian/confluence/logs
           livenessProbe:
             exec:
-              command: ["curl", "localhost:8090"]
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            timeoutSeconds: 5
+              command: ["/bin/true"]
+          #  httpGet:
+          #    path: /
+          #    port: 8090
+          #  initialDelaySeconds: 10
+          #  periodSeconds: 15
+          #  timeoutSeconds: 5
           readinessProbe:
             exec:
-              command: ["curl", "localhost:8090"]
+              command: ["/bin/true"]
+            #httpGet:
+            #  path: /
+            #  port: 8090
       imagePullSecrets:
         - name: docker
       volumes:
