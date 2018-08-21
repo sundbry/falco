@@ -42,6 +42,8 @@ spec:
               value: "MB_DB_PASS"
             - name: `MB_DB_HOST'
               value: "MB_DB_HOST"
+            - name: `MB_ENCRYPTION_SECRET_KEY'
+              value: "MB_ENCRYPTION_SECRET_KEY"
             - name: `JAVA_TIMEZONE'
               value: "JAVA_TIMEZONE"
           volumeMounts:
@@ -52,7 +54,7 @@ spec:
               path: /
               port: 3000
             initialDelaySeconds: 30 
-            timeoutSeconds: 5
+            timeoutSeconds: 15
           readinessProbe:
             httpGet:
               path: /

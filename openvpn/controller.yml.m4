@@ -46,3 +46,5 @@ spec:
             secretName: SERVICE
       imagePullSecrets:
         - name: docker
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
