@@ -1,4 +1,4 @@
-define(TIMESCALEDB_VERSION, 0.9.2)dnl
+define(TIMESCALEDB_VERSION, 0.11.0)dnl
 # Derived from https://github.com/timescale/timescaledb-docker/blob/master/Dockerfile
 FROM REPOSITORY/postgres
 
