@@ -14,7 +14,7 @@ localhost:81 {
   {{ if ne $host "" }}
     {{ range $indexLocation, $location := $server.Locations }}
       {{ $host }}{{ $location.Path }} {
-        log / /var/log/caddy/access.log "{combined}"
+        log / /var/log/caddy/access.log "{common} {host} {latency_ms}"
         tls {$ACME_EMAIL} {
           # https://github.com/mholt/caddy/issues/189
           alpn http/1.1

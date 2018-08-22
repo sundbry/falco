@@ -40,13 +40,19 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
+            - name: `S3_ACCESS_KEY'
+              value: "S3_ACCESS_KEY"
+            - name: `S3_SECRET_KEY'
+              value: "S3_SECRET_KEY"
+            - name: `S3_TARGET'
+              value: "S3_TARGET"
           args:
             - /caddy-ingress-controller
             - --default-backend-service=DEFAULT_BACKEND_SERVICE
           lifecycle:
             postStart:
               exec:
-                command: ["/bin/mkdir", "/var/log/caddy"]
+                command: ["/usr/local/bin/install-collector"]
           volumeMounts:
             - name: logs
               mountPath: /var/log
