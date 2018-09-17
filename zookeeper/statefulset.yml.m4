@@ -30,6 +30,8 @@ spec:
               value: /etc/service/zookeeper/secret/log4j.properties
             - name: ZOODATA
               value: /var/local/zookeeper
+            - name: `ZK_SERVER_HEAP'
+              value: "ifelse(ZK_SERVER_HEAP, `', `1000', ZK_SERVER_HEAP)" # Server heap size (m)
           volumeMounts:
             - name: data
               mountPath: /var/local/zookeeper
