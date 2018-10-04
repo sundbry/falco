@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cd /home/app/ghost
+setuser app ghost run
