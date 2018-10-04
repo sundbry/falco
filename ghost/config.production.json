@@ -9,9 +9,19 @@
  "database": {
   "client": "sqlite3",
   "connection": {
-   "filename": "content/data/ghost.db"
+   "filename": "/home/app/ghost/content/data/ghost.db"
   },
   "useNullAsDefault": true,
   "debug": false
+ },
+ "paths": {
+  "contentPath": "/home/app/ghost/content/"
+ },
+ "logging": {
+  "level": "warn",
+  "transports": ["stdout"]
+ },
+ "privacy": {
+  "useRpcPing": false
  }
 }
