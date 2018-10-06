@@ -8,6 +8,6 @@ RUN setuser app mkdir /home/app/ghost \
   --db sqlite3 \
   --no-setup \
   --no-stack
-ADD config.production.json /home/app/ghost/config.production.json
+ADD default-config.production.json /home/app/ghost/config.production.json
 RUN mkdir -p /etc/service/ghost
 ADD run /etc/service/ghost/run

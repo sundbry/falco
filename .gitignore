@@ -9,3 +9,4 @@ mysql/*/
 mysql/s3cfg
 openvpn/openvpn.tgz
 syslog/log.conf
+ghost/config.production.json
