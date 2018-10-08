@@ -1,0 +1,7 @@
+#!/bin/sh
+
+cd /home/app/ghost
+if [ -f "$GHOST_CONFIG" ]; then
+  cp -f "$GHOST_CONFIG" /home/app/ghost/config.production.json
+fi
+setuser app ghost run
