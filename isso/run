@@ -1,0 +1,10 @@
+#!/bin/sh
+
+ISSO_DATA=${ISSO_DATA:-/var/lib/isso}
+
+cd /home/app/isso
+mkdir -p $ISSO_DATA
+chown -R app:app $ISSO_DATA
+
+#exec setuser app /home/app/isso/bin/isso -c ${ISSO_CONFIG:-/etc/service/isso/isso.cfg} run
+exec setuser app bash -c "source ./bin/activate && exec /home/app/isso/bin/isso -c ${ISSO_CONFIG:-/etc/service/isso/isso.cfg} run"
