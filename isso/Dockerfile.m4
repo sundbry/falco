@@ -15,7 +15,8 @@ RUN apt-get update -q \
 RUN npm install -g uglify-js jade requirejs bower \ 
  && npm install -g --unsafe-perm node-sass
 
-RUN setuser app bash -c "git clone -b GIT_TAG https://github.com/posativ/isso.git \
+RUN echo TIMESTAMP \
+  && setuser app bash -c "git clone -b GIT_TAG https://github.com/arctype-co/isso.git \
   && cd isso \
   && virtualenv -p /usr/local/bin/pypy . \
   && source ./bin/activate \
