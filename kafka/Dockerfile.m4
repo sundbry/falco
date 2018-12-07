@@ -12,7 +12,7 @@ ENV KAFKA_HEAP_OPTS "-Xmx1G -Xms1G"
 RUN apt-get -y -q update && apt-get -y -q install netcat
 
 WORKDIR /usr/local/kafka
-RUN curl -fSL http://mirrors.ocf.berkeley.edu/apache/kafka/1.1.1/kafka_2.11-1.1.1.tgz | tar -xz --strip-components=1
+RUN curl -fSL http://mirrors.ocf.berkeley.edu/apache/kafka/2.0.0/kafka_2.11-2.0.0.tgz | tar -xz --strip-components=1
 RUN useradd -d /usr/local/kafka kafka
 
 RUN mkdir -p /etc/service/kafka

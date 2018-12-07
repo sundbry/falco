@@ -111,7 +111,7 @@ log.retention.check.interval.ms=300000
 
 # By default the log cleaner is disabled and the log retention policy will default to just delete segments after their retention expires.
 # If log.cleaner.enable=true is set the cleaner will be enabled and individual logs can then be marked for log compaction.
-log.cleaner.enable=false
+log.cleaner.enable=true
 
 ############################# Misc ############################
 # Enable auto creation of topic on the server
@@ -133,5 +133,5 @@ zookeeper.connect=ZOOKEEPER_CONNECT
 zookeeper.connection.timeout.ms=6000
 
 # Set these during a cluster upgrade
-#inter.broker.protocol.version=0.10.1.0
+inter.broker.protocol.version=INTER_BROKER_PROTOCOL_VERSION
 #log.message.format.version=0.10.1

@@ -25,6 +25,8 @@ spec:
           env:
             - name: `ZOOKEEPER_CONNECT'
               value: ZOOKEEPER_CONNECT
+            - name: `INTER_BROKER_PROTOCOL_VERSION'
+              value: "ifelse(INTER_BROKER_PROTOCOL_VERSION, `', `2.0', INTER_BROKER_PROTOCOL_VERSION)"
             - name: KAFKA_LOG_DIRS
               value: /var/local/kafka
             - name: LOG4J_PROPERTIES_PATH
