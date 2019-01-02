@@ -35,6 +35,8 @@ spec:
               mountPath: /var/www/matomo/tmp
             - name: config
               mountPath: /var/www/matomo/config
+            - name: user
+              mountPath: /var/www/matomo/misc/user
           livenessProbe:
             httpGet:
               path: /nginx/status
@@ -54,6 +56,9 @@ spec:
           emptyDir:
         - name: config
           hostPath:
-            path: HOST_VOLUME_PATH
+            path: HOST_VOLUME_PATH/config
+        - name: user
+          hostPath:
+            path: HOST_VOLUME_PATH/user
       imagePullSecrets:
         - name: docker
