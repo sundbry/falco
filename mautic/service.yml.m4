@@ -1,13 +1,15 @@
+define(NAME, ifdef(`PROFILE', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE), SERVICE))dnl
 kind: Service
 apiVersion: v1
 metadata:
-  name: SERVICE
+  name: NAME
   labels:
-    name: SERVICE
+    name: NAME
 spec:
   ports:
-    - port: 8080
+    - port: 80
       protocol: TCP
   selector:
     role: SERVICE
+ifelse(`PROFILE', `',    profile: PROFILE)
   type: ClusterIP

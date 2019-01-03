@@ -22,7 +22,7 @@ spec:
         - name: SERVICE
           image: IMAGE
           ports:
-            - containerPort: 8080
+            - containerPort: 80
           env: 
             - name: `MAUTIC_DB_HOST'
               value: "MAUTIC_DB_HOST"
