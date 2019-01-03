@@ -1,13 +1,15 @@
+define(`NODE_VERSION', `10.15.0')dnl
+define(`OROCRM_VERSION', `3.1.0-rc')dnl
 FROM REPOSITORY/php-fpm-7.1
  
 RUN mkdir /usr/local/node && \
-  curl -fL https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz | tar -xJ -C /usr/local/node --strip-components=1
+  curl -fL https://nodejs.org/dist/v`'NODE_VERSION/node-v`'NODE_VERSION-linux-x64.tar.xz | tar -xJ -C /usr/local/node --strip-components=1
 ENV PATH /usr/local/node/bin:$PATH
 
 RUN bash -c "curl -sS https://getcomposer.org/installer | php7.1" && \
   mv composer.phar /usr/bin/composer
 
-RUN git clone -b 3.0.0-beta https://github.com/oroinc/crm-application.git /var/www/orocrm && \
+RUN git clone -b OROCRM_VERSION https://github.com/oroinc/crm-application.git /var/www/orocrm && \
   cd /var/www/orocrm && \
   mkdir ../.composer && \
   chown -R www-data:www-data . ../.composer && \
