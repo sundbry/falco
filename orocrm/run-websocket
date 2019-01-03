@@ -1,5 +1,0 @@
-#!/bin/bash
-
-sleep 1
-
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console clank:server --env=prod

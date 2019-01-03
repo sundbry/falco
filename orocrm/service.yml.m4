@@ -1,14 +1,15 @@
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
 kind: Service
 apiVersion: v1
 metadata:
-  name: SERVICE-PROFILE
+  name: NAME
   labels:
-    name: SERVICE-PROFILE
+    name: NAME
 spec:
   ports:
     - port: 80
       protocol: TCP
   selector:
     role: SERVICE
-    profile: PROFILE
+ifelse(PROFILE, `', `',    profile: PROFILE)
   type: ClusterIP
