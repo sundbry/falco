@@ -9,11 +9,15 @@ if [ ! -f "config/config.yml" ]; then
 fi
 
 chown -R www-data:www-data cache config
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console fos:js-routing:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:localization:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console assets:install --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console assetic:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:translation:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:requirejs:build --env=prod
-logger "OroCRM initialization complete"
+if [ ! -f /var/run/orocrm-init ]; then
+  setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console fos:js-routing:dump --env=prod
+  setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:localization:dump --env=prod
+  setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console assets:install --env=prod
+  setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console assetic:dump --env=prod
+  setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:translation:dump --env=prod
+  setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:requirejs:build --env=prod
+  logger "OroCRM initialization complete"
+  touch /var/run/orocrm-init
+fi
+echo "Starting OroCRM message queue consumer"
 setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:message-queue:consume --env=prod > /dev/null
