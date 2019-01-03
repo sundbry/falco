@@ -1,18 +1,19 @@
 #!/bin/bash
 
-PARAMETERS_YML=/etc/service/orocrm/secret/parameters.yml
-
-if [ -f "$PARAMETERS_YML" ]; then
-  cp -f "$PARAMETERS_YML" /var/www/orocrm/app/config/
-fi
+set -e
 
 cd /var/www/orocrm
+
+if [ ! -f "config/config.yml" ]; then
+  cp -rf /etc/service/orocrm/default-config/* config/
+fi
+
 chown -R www-data:www-data cache
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console fos:js-routing:dump --target web/js/routes.js.js --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console oro:localization:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console assets:install --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console assetic:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console oro:translation:dump --env=prod
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console oro:requirejs:build --env=prod
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console fos:js-routing:dump --target web/js/routes.js.js --env=prod
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:localization:dump --env=prod
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console assets:install --env=prod
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console assetic:dump --env=prod
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:translation:dump --env=prod
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:requirejs:build --env=prod
 logger "OroCRM initialization complete"
-setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini -d disable_functions="" /var/www/orocrm/app/console oro:message-queue:consume --env=prod > /dev/null
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocrm/bin/console oro:message-queue:consume --env=prod > /dev/null

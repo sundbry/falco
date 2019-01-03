@@ -8,19 +8,19 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+ifelse(PROFILE, `', `',    profile: PROFILE)
 spec:
   replicas: REPLICAS
   selector:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+ifelse(PROFILE, `', `',    profile: PROFILE)
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-        profile: PROFILE
+ifelse(PROFILE, `', `',        profile: PROFILE)
       annotations:
         pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
@@ -36,8 +36,8 @@ spec:
               mountPath: /var/log/nginx
             - name: cache
               mountPath: /var/www/orocrm/cache/prod
-            - name: secret
-              mountPath: /etc/service/orocrm/secret
+            - name: config
+              mountPath: /var/www/orocrm/config
           livenessProbe:
             httpGet:
               path: /nginx/status
@@ -55,8 +55,10 @@ spec:
           emptyDir:
         - name: nginx-logs
           emptyDir:
-        - name: secret
-          secret:
-            secretName: SERVICE-PROFILE
+        - name: config
+          hostPath:
+            path: HOST_VOLUME_PATH/config
       imagePullSecrets:
         - name: docker
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
