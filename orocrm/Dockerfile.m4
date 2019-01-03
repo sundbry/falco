@@ -6,7 +6,7 @@ RUN mkdir /usr/local/node && \
   curl -fL https://nodejs.org/dist/v`'NODE_VERSION/node-v`'NODE_VERSION-linux-x64.tar.xz | tar -xJ -C /usr/local/node --strip-components=1
 ENV PATH /usr/local/node/bin:$PATH
 
-RUN apt-get -y -q update && apt-get -y -q install php7.1-soap php7.1-tidy php7.1-imap
+RUN apt-get -y -q update && apt-get -y -q install php7.1-soap php7.1-tidy php7.1-imap unzip
 
 RUN mkdir -p /etc/service/orocrm
 ADD php.ini /etc/service/php-fpm/php.ini
