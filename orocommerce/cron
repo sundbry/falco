@@ -1,0 +1,1 @@
+*/1 * * * * bash -c 'cd /var/www/orocommerce && /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini bin/console oro:cron --env=prod && touch /var/www/orocommerce/cron.txt' > /dev/null

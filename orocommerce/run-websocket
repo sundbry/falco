@@ -1,0 +1,8 @@
+#!/bin/bash
+
+set -e
+
+cd /var/www/orocommerce
+
+echo "Starting OroCommerce web socket server"
+setuser www-data /usr/bin/php7.1 -c /etc/service/php-fpm/php.ini /var/www/orocommerce/bin/console gos:websocket:server --env=prod > /dev/null
