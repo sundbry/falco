@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: IMAGE
+          image: mautic/mautic:CONTAINER_TAG
           ports:
             - containerPort: 80
           env: 
