@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
         - name: SERVICE
-          image: cptactionhank/atlassian-confluence:CONTAINER_TAG
+          image: IMAGE
           ports:
             - containerPort: 8090
           env:
@@ -31,6 +31,14 @@ spec:
               value: "X_PROXY_PORT"
             - name: `X_PROXY_SCHEME'
               value: "X_PROXY_SCHEME"
+            - name: `X_SMTP_HOST'
+              value: "X_SMTP_HOST"
+            - name: `X_SMTP_PORT'
+              value: "X_SMTP_PORT"
+            - name: `X_SMTP_USER'
+              value: "X_SMTP_USER"
+            - name: `X_SMTP_PASSWORD'
+              value: "X_SMTP_PASSWORD"
           volumeMounts:
             - name: data
               mountPath: /var/atlassian/confluence
