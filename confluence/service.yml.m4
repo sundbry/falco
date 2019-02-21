@@ -11,5 +11,5 @@ spec:
       protocol: TCP
   selector:
     role: SERVICE
-    profile: ifdef(`PROFILE', PROFILE, `')
+ifelse(`PROFILE', `',    profile: PROFILE)
   type: ClusterIP

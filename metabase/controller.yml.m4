@@ -8,19 +8,19 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+    profile: "PROFILE"
 spec:
   replicas: 1
   selector:
     name: NAME
     role: SERVICE
-    profile: PROFILE
+    profile: "PROFILE"
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-        profile: PROFILE
+        profile: "PROFILE"
       annotations:
         pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
