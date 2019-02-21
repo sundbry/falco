@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mkdir /var/log/caddy
+mkdir -p /var/log/caddy
 m4 \
   -D S3_ACCESS_KEY="$S3_ACCESS_KEY" \
   -D S3_SECRET_KEY="$S3_SECRET_KEY" \

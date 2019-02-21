@@ -1,5 +1,5 @@
-define(NAME, SERVICE-PROFILE-CONTROLLER_TAG)dnl
-define(INGRESS_CLASS, ifelse(INGRESS_CLASS, `', `', INGRESS_CLASS))dnl
+define(NAME, ifelse(PROFILE, `', SERVICE-CONTROLLER_TAG, SERVICE-PROFILE-CONTROLLER_TAG))dnl
+define(INGRESS_CLASS, ifdef(`INGRESS_CLASS', INGRESS_CLASS, `'))dnl
 kind: ReplicationController
 apiVersion: v1
 metadata:
@@ -51,6 +51,9 @@ spec:
             - /caddy-ingress-controller
             - --default-backend-service=DEFAULT_BACKEND_SERVICE
             - --ingress-class=INGRESS_CLASS
+          #args: 
+          #   - /bin/sleep
+          #   - 90m
           lifecycle:
             postStart:
               exec:

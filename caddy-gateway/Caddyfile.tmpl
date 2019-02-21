@@ -15,10 +15,8 @@ localhost:81 {
     {{ range $indexLocation, $location := $server.Locations }}
       {{ $host }}{{ $location.Path }} {
         log / /var/log/caddy/access.log "{common} {host} {latency_ms}"
-        tls {$ACME_EMAIL} {
-          # https://github.com/mholt/caddy/issues/189
-          alpn http/1.1
-        }
+        tls ryan@arctype.co
+
         {{ $location.ConfigurationSnippet }}
 
         proxy / {

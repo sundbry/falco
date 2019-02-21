@@ -1,4 +1,4 @@
-FROM arctype/caddy-ingress-controller:0.0.1
+FROM arctype/caddy-ingress-controller:0.1.4
 
 RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories && \
   apk update && \
