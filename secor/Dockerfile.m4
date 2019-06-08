@@ -10,10 +10,14 @@ RUN apt-get -y -q update && \
 
 ENV SECOR_INSTALL_DIR=/opt/secor
 RUN cd secor && \
-  mvn -Pkafka-1.0.0 package && \
+  mvn -Pkafka-1.0.0 package 
+
+RUN cd secor && \
+  find target && \
   mkdir ${SECOR_INSTALL_DIR} && \
   tar -zxvf target/secor-*-bin.tar.gz -C ${SECOR_INSTALL_DIR} && \ 
   mv ${SECOR_INSTALL_DIR}/secor-*.jar ${SECOR_INSTALL_DIR}/secor.jar
   
 RUN mkdir -p /etc/service/secor
-ADD run /etc/service/secor/run
+ADD run /etc/service/secor/
+ADD log4j.properties /etc/service/secor/
