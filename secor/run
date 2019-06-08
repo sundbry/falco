@@ -1,7 +1,7 @@
 #!/bin/bash
 
 cd ${SECOR_INSTALL_DIR}
-exec java -ea -Dsecor_group=${SECOR_GROUP:-secor_backup} \
+exec java -ea \
   -Dlog4j.configuration=${LOG4J_PROPERTIES:-file:/etc/service/secor/log4j.properties} \
   -Dconfig=${SECOR_PROPERTIES:-secor.prod.backup.properties} \
   -cp secor.jar:lib/* \

@@ -8,5 +8,6 @@ mediawiki/LocalSettings.php
 mysql/*/
 mysql/s3cfg
 openvpn/openvpn.tgz
+secor/secor.properties
 syslog/log.conf
 ghost/config.production.json
