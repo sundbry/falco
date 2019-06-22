@@ -22,33 +22,45 @@ RUN apt-get update \
         msmtp \
 				libedit-dev \
 				autoconf \
-				libtool
+				libtool \
+				doxygen
 
 # Asterisk expects /usr/sbin/sendmail
 RUN ln -s /usr/bin/msmtp /usr/sbin/sendmail
 
-RUN cd /tmp \
-		&& curl -L -o srtp.tgz https://github.com/cisco/libsrtp/archive/v${SRTP_VERSION}.tar.gz \
-    && tar xzf srtp.tgz
-RUN cd /tmp/libsrtp* \
+RUN cd /usr/src \
+		&& curl -L -o libsrtp.tgz https://github.com/cisco/libsrtp/archive/v${SRTP_VERSION}.tar.gz \
+    && tar xzf libsrtp.tgz
+RUN cd /usr/src/libsrtp* \
     && ./configure CFLAGS=-fPIC \
     && make \
-    && make install
+    && make install \
+		&& rm -rf /usr/src/libsrtp*
 
-RUN cd /tmp \
+RUN cd /usr/src \
 		&& curl -L -o jansson.tgz https://github.com/akheron/jansson/archive/v${JANSSON_VERSION}.tar.gz \
 		&& tar xzf jansson.tgz \
     && cd jansson-* \
 		&& autoreconf -i \
-    && ls -l && ./configure && make && make install
+    && ./configure && make && make install \
+		&& rm -rf /usr/src/jannson*
 
-RUN cd /tmp && curl -o asterisk.tar.gz http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-${ASTERISK_VERSION}.tar.gz \
+RUN cd /usr/src \
+		&& curl -L -o pjproject.tgz https://github.com/pjsip/pjproject/archive/2.9.tar.gz \
+		&& tar xzf pjproject.tgz \
+		&& cd pjproject-* \
+		&& ./configure --with-external-srtp --disable-video --enable-shared --prefix=/usr \
+		&& make && make install && ldconfig
+
+RUN cd /usr/src && curl -o asterisk.tar.gz http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-${ASTERISK_VERSION}.tar.gz \
     && tar xzf asterisk.tar.gz
-RUN cd /tmp/asterisk* \
-    && ./configure --with-pjproject-bundled --with-crypto --with-ssl \
+RUN cd /usr/src/asterisk* \
+		&& apt-get -y install aptitude \
+		&& ./contrib/scripts/install_prereq install
+RUN cd /usr/src/asterisk* \
+    && ./configure --with-pjproject=/usr --with-pjproject-bundled=no --with-crypto --with-ssl --with-srtp \
     && make \
-    && make install \
-    && make samples \
-    && make config
+    && make install
 
-CMD asterisk -fvvv
+RUN mkdir -p /etc/service/asterisk
+ADD run /etc/service/asterisk/
