@@ -23,7 +23,8 @@ RUN apt-get update \
 				libedit-dev \
 				autoconf \
 				libtool \
-				doxygen
+				doxygen \
+        aptitude
 
 # Asterisk expects /usr/sbin/sendmail
 RUN ln -s /usr/bin/msmtp /usr/sbin/sendmail
@@ -33,8 +34,7 @@ RUN cd /usr/src \
     && tar xzf libsrtp.tgz
 RUN cd /usr/src/libsrtp* \
     && ./configure CFLAGS=-fPIC \
-    && make \
-    && make install \
+    && make && make install \
 		&& rm -rf /usr/src/libsrtp*
 
 RUN cd /usr/src \
@@ -45,22 +45,23 @@ RUN cd /usr/src \
     && ./configure && make && make install \
 		&& rm -rf /usr/src/jannson*
 
+RUN cd /usr/src && curl -o asterisk.tar.gz http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-${ASTERISK_VERSION}.tar.gz \
+    && tar xzf asterisk.tar.gz \
+    && mv /usr/src/asterisk-* /usr/src/asterisk
+RUN cd /usr/src/asterisk \
+		&& ./contrib/scripts/install_prereq install
 RUN cd /usr/src \
 		&& curl -L -o pjproject.tgz https://github.com/pjsip/pjproject/archive/2.9.tar.gz \
 		&& tar xzf pjproject.tgz \
 		&& cd pjproject-* \
+    && echo "#define _ASTERISK_ASTMM_H" > pjlib/include/pj/config_site.h \
+    && cat /usr/src/asterisk/third-party/pjproject/patches/config_site.h >> pjlib/include/pj/config_site.h \
 		&& ./configure --with-external-srtp --disable-video --enable-shared --prefix=/usr \
-		&& make && make install && ldconfig
-
-RUN cd /usr/src && curl -o asterisk.tar.gz http://downloads.asterisk.org/pub/telephony/asterisk/releases/asterisk-${ASTERISK_VERSION}.tar.gz \
-    && tar xzf asterisk.tar.gz
-RUN cd /usr/src/asterisk* \
-		&& apt-get -y install aptitude \
-		&& ./contrib/scripts/install_prereq install
-RUN cd /usr/src/asterisk* \
+		&& make && make install && ldconfig \
+    && rm -rf /usr/src/pjproject*
+RUN cd /usr/src/asterisk \
     && ./configure --with-pjproject=/usr --with-pjproject-bundled=no --with-crypto --with-ssl --with-srtp \
-    && make \
-    && make install
+    && make && make install
 
 RUN mkdir -p /etc/service/asterisk
 ADD run /etc/service/asterisk/
