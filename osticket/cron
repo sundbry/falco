@@ -1,0 +1,1 @@
+*/2 * * * * bash -c 'cd /var/www && /usr/bin/php -c /etc/service/php-fpm/php.ini ./api/cron.php' 2>&1 | logger -t cron.php -e
