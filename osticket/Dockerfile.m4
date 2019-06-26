@@ -1,5 +1,7 @@
 FROM REPOSITORY/php-fpm
 
-RUN cd /usr/src \
-  && curl -L -o osticket.tgz https://github.com/osTicket/osTicket/archive/v1.12.tar.gz \
-  && tar xzf osticket.tgz \
+RUN apt-get -y update && apt-get -y install php-imap
+
+RUN chmod 0777 /usr/src \
+  && cd /usr/src \
+  && setuser www-data git clone -b v1.12 https://github.com/osTicket/osTicket.git
