@@ -5,12 +5,12 @@ metadata:
   name: NAME
   labels:
     name: NAME
-ifelse(PROFILE, `', `',    profile: PROFILE)
+    ifelse(PROFILE, `', `', profile: PROFILE)
 spec:
   ports:
     - port: 3000
       protocol: TCP
   selector:
     role: SERVICE
-ifelse(PROFILE, `', `',    profile: PROFILE)
+    ifelse(PROFILE, `', `', profile: PROFILE)
   type: ClusterIP
