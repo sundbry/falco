@@ -1,0 +1,5 @@
+#!/bin/bash
+
+MONGOD_CONF=${MONGOD_CONF:-/etc/service/mongo/mongod.conf}
+
+mongod -f $MONGOD_CONF
