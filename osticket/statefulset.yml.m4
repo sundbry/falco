@@ -23,6 +23,9 @@ spec:
           image: IMAGE
           ports:
             - containerPort: 80
+          env:
+            - name: `NGINX_CONF'
+              value: "/etc/www/nginx.conf"
           volumeMounts:
             - name: www
               mountPath: /var/www
