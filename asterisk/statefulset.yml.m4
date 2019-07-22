@@ -30,18 +30,15 @@ spec:
             # Host networking should not require us to specify all ports
             # "10000-10099:10000-10099/udp"
           volumeMounts:
-            - name: msmtprc
-              mountPath: /etc/msmtprc
             - name: config
               mountPath: /etc/asterisk
             - name: data
               mountPath: /var/lib/asterisk
             - name: spool
               mountPath: /var/spool/asterisk
+            - name: log
+              mountPath: /var/log
       volumes:
-        - name: msmtprc
-          hostPath:
-            path: HOST_VOLUME_PATH/msmtprc
         - name: config
           hostPath:
             path: HOST_VOLUME_PATH/config
@@ -51,6 +48,8 @@ spec:
         - name: spool
           hostPath:
             path: HOST_VOLUME_PATH/spool
+        - name: log
+          emptyDir:
       imagePullSecrets:
         - name: docker
       nodeSelector:
