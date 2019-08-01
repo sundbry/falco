@@ -2,4 +2,7 @@
 
 exec prometheus \
   --config.file="${PROMETHEUS_CONFIG:-/usr/go/src/github.com/prometheus/prometheus/documentation/examples/prometheus.yml}" \
-  --web.external-url="${PROMETHEUS_URL:-http://localhost:9090}"
+  --web.external-url="${PROMETHEUS_URL:-http://localhost:9090}" \
+  --storage.tsdb.path="${PROMETHEUS_STORAGE_TSDB_PATH:-/var/lib/prometheus}" \
+  --storage.tsdb.path="${PROMETHEUS_STORAGE_TSDB_RETENTION_TIME:-15d}" \
+
