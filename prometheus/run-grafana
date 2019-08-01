@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /opt/grafana
+exec setuser grafana grafana-server -config /var/lib/grafana/grafana.ini

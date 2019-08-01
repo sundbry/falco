@@ -23,6 +23,7 @@ spec:
           image: IMAGE
           ports:
             - containerPort: 9090
+            - containerPort: 3000
           env: 
             - name: PROMETHEUS_CONFIG
               value: /var/lib/prometheus/prometheus.yml
@@ -35,6 +36,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /var/lib/prometheus
+            - name: grafana-data
+              mountPath: /var/lib/grafana
           livenessProbe:
             httpGet:
               path: /metrics
@@ -47,6 +50,9 @@ spec:
         - name: data
           hostPath:
             path: HOST_VOLUME_PATH
+        - name: grafana-data
+          hostPath:
+            path: GRAFANA_HOST_VOLUME_PATH
       imagePullSecrets:
         - name: docker
       nodeSelector:
