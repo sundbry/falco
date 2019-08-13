@@ -1,6 +1,6 @@
-define(NAME, ifelse(PROFILE, `', SERVICE-CONTROLLER_TAG, SERVICE-PROFILE-CONTROLLER_TAG))
-kind: ReplicationController
-apiVersion: v1
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
   labels:
@@ -9,10 +9,11 @@ metadata:
     profile: "PROFILE"
 spec:
   replicas: 1
+  serviceName: SERVICE
   selector:
-    name: "NAME"
-    role: "SERVICE"
-    profile: "PROFILE"
+    matchLabels:
+      role: SERVICE
+      profile: "PROFILE"
   template:
     metadata:
       labels:
