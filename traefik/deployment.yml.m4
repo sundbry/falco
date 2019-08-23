@@ -33,6 +33,9 @@ spec:
         - --api
         - --kubernetes
         - --logLevel=INFO
+        - --defaultentrypoints=http,https
+        - --entrypoints=Name:http Address::80
+        - --entrypoints=Name:https Address::443 TLS
       hostNetwork: true
       nodeSelector:
         ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
