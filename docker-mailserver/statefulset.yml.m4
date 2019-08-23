@@ -30,6 +30,8 @@ spec:
               hostPort: 587
             - containerPort: 993
               hostPort: 993
+            - containerPort: 995
+              hostPort: 995
           securityContext:
             capabilities:
               add: ["NET_ADMIN"] # fail2ban support
@@ -45,7 +47,7 @@ spec:
             - name: `POSTGREY_DELAY'
               value: "300"
             - name: `ENABLE_POP3'
-              value: "0"
+              value: "ENABLE_POP3"
             - name: `ONE_DIR'
               value: "1"
             - name: `SSL_TYPE'
