@@ -1,26 +1,24 @@
-define(`NAME', ifelse(PROFILE, `',
-                 SERVICE-CONTROLLER_TAG,
-                 SERVICE-PROFILE-CONTROLLER_TAG))
-kind: ReplicationController
-apiVersion: v1
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
   labels:
     name: NAME
     role: SERVICE
 spec:
-  replicas: 1 # Do NOT replicate this controller -RS
+  replicas: 1
+  serviceName: "SERVICE"
   selector:
-    name: NAME
-    role: SERVICE
+    matchLabels:
+      role: SERVICE
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
-      annotations:
-        pod.beta.kubernetes.io/subdomain: SERVICE
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
         - name: SERVICE
           image: IMAGE
@@ -28,10 +26,10 @@ spec:
             - containerPort: 6379
           env: 
             - name: REDIS_DATA
-              value: /var/local/redis
+              value: /var/redis
           volumeMounts:
-            - name: SERVICE-data
-              mountPath: /var/local/redis
+            - name: data
+              mountPath: /var/redis
           livenessProbe:
             exec:
               command: ["redis-cli", "ping"]
@@ -42,7 +40,7 @@ spec:
             exec:
               command: ["redis-cli", "ping"]
       volumes:
-        - name: SERVICE-data
+        - name: data
           emptyDir: {}
       imagePullSecrets:
         - name: docker

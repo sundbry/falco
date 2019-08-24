@@ -1,4 +1,7 @@
 #!/bin/bash
 
-cd ${REDIS_DATA:-/home/app}
-setuser app redis-server ${REDIS_CONF:-/etc/service/redis/redis.conf}
+REDIS_DATA=${REDIS_DATA:-/var/redis}
+mkdir -p $REDIS_DATA
+chown redis:redis $REDIS_DATA
+cd $REDIS_DATA
+setuser redis redis-server ${REDIS_CONF:-/etc/service/redis/redis.conf}
