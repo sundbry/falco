@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec setuser memcached memcached -m ${MEMCACHED_SIZE_MB:-64}
