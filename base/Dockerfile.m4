@@ -1,17 +1,24 @@
-FROM phusion/baseimage:0.10.1
+FROM phusion/baseimage:0.11
 
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive KILL_PROCESS_TIMEOUT=60 KILL_ALL_PROCESS_TIMEOUT=60
 
-# Update apt
-RUN apt-get update -q -q
-RUN apt-get upgrade --yes
+RUN apt-get update -y -q && \
+  apt-get upgrade -y -q && \
+  apt-get -y -q remove syslog-ng && \
+  apt-get install -y -q wget less m4 make build-essential pkg-config libglib2.0-dev libssl-dev libjson-c-dev ca-certificates libcurl4-openssl-dev && \
+  mkdir -p /usr/src/syslog-ng && \
+  curl -sfL https://github.com/balabit/syslog-ng/releases/download/syslog-ng-3.23.1/syslog-ng-3.23.1.tar.gz | tar -xz -C /usr/src/syslog-ng --strip-components=1 && \
+  cd /usr/src/syslog-ng && \
+  ./configure --help && \
+  ./configure --prefix=/usr --disable-riemann --disable-python --disable-systemd --enable-http --sysconfdir=/etc/syslog-ng && \
+  make && \
+  make install && \
+  rm -rf /usr/src/syslog-ng && \
+  touch /etc/service/cron/down /etc/service/sshd/down && \
+  useradd -m app
 
-# Install utitiles
-RUN apt-get install -y wget less m4 make git
-
-# Configure syslog
+# configure syslog
 ADD syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
+ADD syslog-stdout.conf /etc/syslog-ng/conf.d/syslog-stdout.conf
+ADD syslog-dest.conf.m4 /etc/syslog-ng/syslog-dest.conf.m4
 
-RUN useradd -m app
-RUN chown -R app:app /home/app
-WORKDIR /home/app

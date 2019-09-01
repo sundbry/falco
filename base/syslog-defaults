@@ -1,0 +1,16 @@
+# log level of messages which should go to console
+# see syslog(3) for details
+#
+#CONSOLE_LOG_LEVEL=1
+
+# Command line options to syslog-ng
+SYSLOGNG_OPTS="--no-caps"
+
+if ! [ -z "$SYSLOG_DESTINATION" ]; then
+  echo "Installing syslog forwarder to $SYSLOG_DESTINATION"
+  m4 \
+    -D SYSLOG_DESTINATION=$SYSLOG_DESTINATION \
+    -D SYSLOG_DESTINATION_TEMPLATE=${SYSLOG_DESTINATION_TEMPLATE:-"${ISODATE} ${LOGHOST} ${MSGHDR}${MSG}\n"}
+    /etc/syslog-ng/syslog-dest.conf.m4 \
+    > /etc/syslog-ng/conf.d/syslog-dest.conf
+fi
