@@ -63,6 +63,8 @@ spec:
         - name: SERVICE-cron
           image: IMAGE
           command: 
+            - gosu
+            - sentry
             - sentry
             - run
             - cron
@@ -103,6 +105,8 @@ spec:
         - name: SERVICE-worker-0
           image: IMAGE
           command: 
+            - gosu
+            - sentry
             - sentry
             - run
             - worker
