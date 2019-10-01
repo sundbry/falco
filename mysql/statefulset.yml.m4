@@ -1,9 +1,6 @@
-define(`CONTAINER_NAME', ifelse(CONTAINER_NAME, `', `mysql', CONTAINER_NAME))
-define(`NAME', ifelse(PROFILE, `',
-                 SERVICE-CONTROLLER_TAG,
-                 SERVICE-PROFILE-CONTROLLER_TAG))
-kind: ReplicationController
-apiVersion: v1
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+kind: StatefulSet
+apiVersion: apps/v1
 metadata:
   name: NAME
   labels:
@@ -11,17 +8,16 @@ metadata:
     role: SERVICE
 spec:
   replicas: 1 # Do NOT replicate this controller -RS
+  serviceName: SERVICE
   selector:
-    name: NAME
-    role: SERVICE
+    matchLabels:
+      role: SERVICE
   template:
     metadata:
       labels:
         name: NAME
         role: SERVICE
     spec:
-      subdomain: SERVICE
-      hostname: SERVICE-PROFILE
       containers:
         - name: SERVICE
           image: IMAGE
