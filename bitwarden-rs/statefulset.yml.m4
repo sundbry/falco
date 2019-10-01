@@ -26,11 +26,18 @@ spec:
             - containerPort: 3012 # Websocket?
           env: 
             - name: WEBSOCKET_ENABLED
-              value: "true"
+              value: "false"
             - name: SIGNUPS_ALLOWED
               value: "false"
             - name: LOG_FILE
               value: "/data/bitwarden.log"
+            - name: `DATABASE_URL'
+              value: "DATABASE_URL"
+            - name: ENABLE_DB_WAL
+              value: "false"
+            - name: `ADMIN_TOKEN'
+              value: "ADMIN_TOKEN"
+
           volumeMounts:
             - name: data
               mountPath: /data
