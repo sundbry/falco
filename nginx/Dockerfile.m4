@@ -1,4 +1,4 @@
-FROM REPOSITORY/base
+FROM arctype/base
 
 EXPOSE 80 443
 
