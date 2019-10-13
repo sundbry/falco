@@ -1,6 +1,0 @@
-#!/bin/bash
-
-sleep 3 # Wait for syslog-ng
-mkdir -p /tmp/php/session
-chown -R www-data:www-data /tmp/php/session
-php-fpm7.1 -F -c $PHP_INI -y $PHP_FPM_CONF
