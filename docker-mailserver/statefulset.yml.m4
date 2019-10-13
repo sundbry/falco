@@ -6,6 +6,8 @@ metadata:
   labels:
     name: NAME
     role: SERVICE
+  annotations:
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   serviceName: SERVICE
