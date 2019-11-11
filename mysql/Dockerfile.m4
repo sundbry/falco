@@ -1,11 +1,11 @@
-FROM REPOSITORY/base
+FROM arctype/base
 
 EXPOSE 3306
 ENV MY_CNF /etc/service/mysql/my.cnf
 VOLUME /var/lib/mysql
 
-RUN apt-get -y update \
- && apt-get -y install mysql-server
+RUN apt-get -y -q update \
+ && apt-get -y -q install mysql-server
 
 ENV MYSQL_BACKUP_INTERVAL=86400
 RUN mkdir -p /etc/service/mysql-backup /var/run/mysqld \
