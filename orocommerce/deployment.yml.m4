@@ -1,8 +1,6 @@
-define(`NAME', ifelse(PROFILE, `',
-                 SERVICE-CONTROLLER_TAG,
-                 SERVICE-PROFILE-CONTROLLER_TAG))
-kind: ReplicationController
-apiVersion: v1
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+kind: Deployment
+apiVersion: apps/v1
 metadata:
   name: NAME
   labels:
@@ -12,9 +10,15 @@ ifelse(PROFILE, `', `',    profile: PROFILE)
 spec:
   replicas: REPLICAS
   selector:
-    name: NAME
-    role: SERVICE
-ifelse(PROFILE, `', `',    profile: PROFILE)
+    matchLabels:
+      name: NAME
+      role: SERVICE
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+ifelse(PROFILE, `', `',      profile: PROFILE)
   template:
     metadata:
       labels:
