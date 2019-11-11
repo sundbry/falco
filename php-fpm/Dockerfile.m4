@@ -23,8 +23,10 @@ RUN cd /usr/src/php && \
     --enable-mbstring \
     --with-mcrypt \
     --with-mysqli \
-    --with-pcre-regex \
     --with-openssl \
+    --with-pcre-regex \
+    --with-pdo-mysql \
+    --with-pdo-pgsql \
     --enable-soap \
     --with-pgsql \
     --with-tidy \
@@ -51,4 +53,5 @@ ADD php.ini /etc/service/php-fpm/php.ini
 ADD php-fpm.conf /etc/service/php-fpm/php-fpm.conf
 ADD pool.d /etc/service/php-fpm/pool.d
 ADD run /etc/service/php-fpm/run
-RUN chmod 0755 /etc/service/php-fpm/run
+RUN chmod 0755 /etc/service/php-fpm/run && \
+  ln -sf /etc/service/php-fpm/php.ini /usr/lib/php.ini
