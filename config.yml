@@ -1,0 +1,10 @@
+options:
+  repository: arctype # Docker repository
+  cluster: local
+
+clusters:
+  local:
+    provider: native
+    kubeconfig: .kubeconfig
+
+environments: {}
