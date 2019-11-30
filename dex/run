@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd /usr/lib/dex
+mkdir examples
+chown app:app examples
+exec setuser app /usr/bin/dex serve ${DEX_CONFIG:-/etc/service/dex/config-example.yml}
