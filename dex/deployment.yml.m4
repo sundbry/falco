@@ -30,13 +30,23 @@ spec:
           image: IMAGE
           ports:
             - containerPort: 5556
+          env:
+            - name: DEX_CONFIG
+              value: /etc/service/dex/config/config.yml
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 5556
             initialDelaySeconds: 15
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 5556
+          volumeMounts:
+            - name: config
+              mountPath: /etc/service/dex/config
+      volumes:
+        - name: config
+          configMap:
+            name: dex
