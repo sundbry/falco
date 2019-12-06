@@ -33,15 +33,16 @@ ifelse(PROFILE, `', `',        profile: PROFILE)
           image: IMAGE
           ports:
             - containerPort: 80
+          env: 
+            - name: `ORO_ENV'
+              value: "ifdef(ORO_ENV, `', ORO_ENV)"
           volumeMounts:
             - name: tmp
               mountPath: /tmp
             - name: nginx-logs
               mountPath: /var/log/nginx
-            - name: cache
-              mountPath: /var/www/orocommerce/cache/prod
-            - name: config
-              mountPath: /var/www/orocommerce/config
+            - name: oro
+              mountPath: /var/www/orocommerce
           livenessProbe:
             httpGet:
               path: /nginx/status
@@ -55,13 +56,11 @@ ifelse(PROFILE, `', `',        profile: PROFILE)
       volumes:
         - name: tmp
           emptyDir:
-        - name: cache
-          emptyDir:
         - name: nginx-logs
           emptyDir:
-        - name: config
+        - name: oro
           hostPath:
-            path: HOST_VOLUME_PATH/config
+            path: HOST_VOLUME_PATH
       imagePullSecrets:
         - name: docker
       nodeSelector:

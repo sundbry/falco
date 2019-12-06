@@ -2,22 +2,21 @@
 
 set -e
 
+ORO_ENV=${ORO_ENV:-prod}
+
+# Installs orocommerce only if it does not already exist.
+if [ ! -f /var/www/orocommerce/README.md ]; then
+  echo "Installing /var/www/orocommerce";
+  cp -rf /usr/lib/orocommerce /var/www/
+  chown -R www-data:www-data /var/www/orocommerce
+  echo '`sv restart orocommerce` when installation is complete.'
+  sleep infinity
+fi
+
 cd /var/www/orocommerce
 
-if [ ! -f "config/config.yml" ]; then
-  cp -rf /etc/service/orocommerce/default-config/* config/
-fi
+echo "Rebuilding assets"
+setuser www-data /usr/bin/php  ./bin/console oro:assets:install --env=$ORO_ENV > /dev/null
 
-chown -R www-data:www-data cache config
-if [ ! -f /var/run/orocommerce-init ]; then
-  setuser www-data /usr/bin/php /var/www/orocommerce/bin/console fos:js-routing:dump --env=prod
-  setuser www-data /usr/bin/php /var/www/orocommerce/bin/console oro:localization:dump --env=prod
-  setuser www-data /usr/bin/php /var/www/orocommerce/bin/console assets:install --env=prod
-  setuser www-data /usr/bin/php /var/www/orocommerce/bin/console assetic:dump --env=prod
-  setuser www-data /usr/bin/php /var/www/orocommerce/bin/console oro:translation:dump --env=prod
-  setuser www-data /usr/bin/php /var/www/orocommerce/bin/console oro:requirejs:build --env=prod
-  logger "OroCommerce initialization complete"
-  touch /var/run/orocommerce-init
-fi
 echo "Starting OroCommerce message queue consumer"
-setuser www-data /usr/bin/php /var/www/orocommerce/bin/console oro:message-queue:consume --env=prod > /dev/null
+exec setuser www-data /usr/bin/php ./bin/console oro:message-queue:consume --env=$ORO_ENV > /dev/null

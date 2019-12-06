@@ -12,8 +12,8 @@ RUN mkdir -p /etc/service/orocommerce && \
   bash -c "curl -sS https://getcomposer.org/installer | php" && \
   mv composer.phar /usr/bin/composer
 
-RUN git clone -b OROCRM_VERSION https://github.com/oroinc/orocommerce-application.git /var/www/orocommerce && \
-  cd /var/www/orocommerce && \
+RUN git clone -b OROCRM_VERSION https://github.com/oroinc/orocommerce-application.git /usr/lib/orocommerce && \
+  cd /usr/lib/orocommerce && \
   mkdir ../.composer && \
   chown -R www-data:www-data . ../.composer && \
   setuser www-data php /usr/bin/composer install --prefer-dist
@@ -27,4 +27,4 @@ RUN \
   chmod 0755 /etc/service/orocommerce/run && \
   rm -f /etc/service/cron/down && \
   setuser www-data crontab /etc/service/orocommerce/cron && \
-  cp -r /var/www/orocommerce/config /etc/service/orocommerce/default-config
+  chown -R www-data:www-data /var/www

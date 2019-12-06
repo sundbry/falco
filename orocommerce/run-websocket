@@ -2,7 +2,14 @@
 
 set -e
 
+ORO_ENV=${ORO_ENV:-prod}
+
+while [ ! -f /var/www/orocommerce/README.md ]; do
+  echo "Waiting for /var/www/orocommerce"
+  sleep 5
+done
+
 cd /var/www/orocommerce
 
 echo "Starting OroCommerce web socket server"
-setuser www-data /usr/bin/php /var/www/orocommerce/bin/console gos:websocket:server --env=prod > /dev/null
+exec setuser www-data /usr/bin/php ./bin/console gos:websocket:server --env=$ORO_ENV > /dev/null
