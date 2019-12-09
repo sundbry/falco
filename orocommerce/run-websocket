@@ -4,10 +4,9 @@ set -e
 
 ORO_ENV=${ORO_ENV:-prod}
 
-while [ ! -f /var/www/orocommerce/README.md ]; do
-  echo "Waiting for /var/www/orocommerce"
-  sleep 5
-done
+if [ ! -f /var/www/orocommerce/README.md ]; then
+  sleep infinity
+fi
 
 cd /var/www/orocommerce
 

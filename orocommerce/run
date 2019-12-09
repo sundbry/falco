@@ -9,7 +9,7 @@ if [ ! -f /var/www/orocommerce/README.md ]; then
   echo "Installing /var/www/orocommerce";
   cp -rf /usr/lib/orocommerce /var/www/
   chown -R www-data:www-data /var/www/orocommerce
-  echo '`sv restart orocommerce` when installation is complete.'
+  echo '`Restart container when installation is complete.'
   sleep infinity
 fi
 
