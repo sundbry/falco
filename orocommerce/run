@@ -15,8 +15,5 @@ fi
 
 cd /var/www/orocommerce
 
-echo "Rebuilding assets"
-setuser www-data /usr/bin/php  ./bin/console oro:assets:install --env=$ORO_ENV > /dev/null
-
 echo "Starting OroCommerce message queue consumer"
 exec setuser www-data /usr/bin/php ./bin/console oro:message-queue:consume --env=$ORO_ENV > /dev/null
