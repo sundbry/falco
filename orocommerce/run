@@ -16,4 +16,4 @@ fi
 cd /var/www/orocommerce
 
 echo "Starting OroCommerce message queue consumer"
-exec setuser www-data /usr/bin/php ./bin/console oro:message-queue:consume --env=$ORO_ENV > /dev/null
+exec setuser www-data /usr/bin/php ./bin/console oro:message-queue:consume --env=$ORO_ENV

@@ -11,4 +11,4 @@ fi
 cd /var/www/orocommerce
 
 echo "Starting OroCommerce web socket server"
-exec setuser www-data /usr/bin/php ./bin/console gos:websocket:server --env=$ORO_ENV > /dev/null
+exec setuser www-data /usr/bin/php ./bin/console gos:websocket:server --env=$ORO_ENV
