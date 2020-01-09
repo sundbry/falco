@@ -77,6 +77,8 @@ spec:
             # https://github.com/tomav/docker-mailserver/issues/1227
             - name: `PERMIT_DOCKER'
               value: "network"
+            - name: `POSTFIX_MESSAGE_SIZE_LIMIT'
+              value: "ifdef(`POSTFIX_MESSAGE_SIZE_LIMIT', POSTFIX_MESSAGE_SIZE_LIMIT, `10240000')"
           volumeMounts:
             - name: mail
               mountPath: /var/mail
