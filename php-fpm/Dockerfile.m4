@@ -2,10 +2,10 @@ FROM arctype/nginx
 
 RUN mkdir -p /usr/src/php && \
   cd /usr/src/php && \
-  curl -fSL https://www.php.net/distributions/php-7.1.33.tar.bz2 | tar -xj --strip-components=1 
+  curl -fSL https://www.php.net/distributions/php-7.2.26.tar.bz2 | tar -xj --strip-components=1 
 
 RUN apt-get -y -q update && \
-  apt-get -q -y install unzip git libxml2-dev libpng-dev libjpeg-dev libwebp-dev libkrb5-dev zlib1g-dev libbz2-dev libc-client2007e-dev libpq-dev libmysqlclient-dev libtidy-dev libmcrypt-dev libgmp-dev autoconf
+  apt-get -q -y install unzip git libxml2-dev libpng-dev libjpeg-dev libwebp-dev libkrb5-dev zlib1g-dev libbz2-dev libc-client2007e-dev libpq-dev libmysqlclient-dev libtidy-dev libmcrypt-dev libgmp-dev autoconf libcurl4-openssl-dev
 
 RUN cd /usr/src/php && \
   ./configure --help && \
@@ -19,6 +19,7 @@ RUN cd /usr/src/php && \
     --with-imap \
     --with-imap-ssl \
     --enable-intl \
+    --with-jpeg-dir=/usr \
     --with-kerberos \
     --enable-mbstring \
     --with-mcrypt \
@@ -27,9 +28,11 @@ RUN cd /usr/src/php && \
     --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
+    --with-png-dir=/usr \
     --enable-soap \
     --with-pgsql \
     --with-tidy \
+    --with-webp-dir=/usr \
     --enable-xml \
     --with-xmlrpc \
     --enable-zip \
@@ -37,11 +40,12 @@ RUN cd /usr/src/php && \
   make && \
   make install
 
-RUN cd /home/app \
-  && setuser app bash -c "git clone -b v1.2.1 https://github.com/edenhill/librdkafka.git && cd librdkafka && ./configure && make" \
+RUN cd /usr/src \
+  && git clone -b v1.2.1 https://github.com/edenhill/librdkafka.git && cd librdkafka && ./configure && make \
   && make -C librdkafka install \
-  && setuser app bash -c "git clone -b 3.1.2 https://github.com/arnaud-lb/php-rdkafka.git && cd php-rdkafka && phpize && ./configure && make all" \
-  && make -C php-rdkafka install
+  && cd .. \
+  && git clone -b 3.1.2 https://github.com/arnaud-lb/php-rdkafka.git && cd php-rdkafka && phpize && ./configure && make all \
+  && make -C php-rdkafka install \
 
 EXPOSE 9000
 
