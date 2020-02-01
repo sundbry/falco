@@ -1,5 +1,5 @@
 template t_with_loghost {
-  template(SYSLOG_DESTIONATION_TEMPLATE);
+  template("SYSLOG_DESTINATION_TEMPLATE");
 };
 
 destination d_central_syslog {

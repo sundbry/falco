@@ -18,6 +18,7 @@ RUN apt-get update -y -q && \
   useradd -m app
 
 # configure syslog
+ADD syslog-defaults /etc/default/syslog-ng
 ADD syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
 ADD syslog-stdout.conf /etc/syslog-ng/conf.d/syslog-stdout.conf
 ADD syslog-dest.conf.m4 /etc/syslog-ng/syslog-dest.conf.m4
