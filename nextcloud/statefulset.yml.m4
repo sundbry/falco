@@ -25,7 +25,7 @@ spec:
             - containerPort: 80
           volumeMounts:
             - name: data
-              mountPath: /var/www/html
+              mountPath: /var/www/nextcloud
       volumes:
         - name: data
           hostPath:

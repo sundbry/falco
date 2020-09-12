@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Install (bootstrap) Nextcloud only if it does not exist
+if [ ! -f /var/www/nextcloud/index.php ]; then
+  mkdir -p /var/www/nextcloud
+  tar xjf /usr/src/nextcloud.tbz2 --strip-components=1 -C /var/www/nextcloud
+  chown -R www-data:www-data /var/www/nextcloud
+fi
+
+exec sleep infinity
