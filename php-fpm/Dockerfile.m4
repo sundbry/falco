@@ -1,51 +1,50 @@
 FROM arctype/nginx
 
+RUN apt-get -y -q update && \
+  apt-get -q -y install unzip git libxml2-dev libpng-dev libjpeg-dev libwebp-dev libkrb5-dev zlib1g-dev libbz2-dev libc-client2007e-dev libpq-dev libmysqlclient-dev libtidy-dev libgmp-dev autoconf libcurl4-openssl-dev libsqlite3-dev libonig-dev libzip-dev
+
 RUN mkdir -p /usr/src/php && \
   cd /usr/src/php && \
-  curl -fSL https://www.php.net/distributions/php-7.2.26.tar.bz2 | tar -xj --strip-components=1 
-
-RUN apt-get -y -q update && \
-  apt-get -q -y install unzip git libxml2-dev libpng-dev libjpeg-dev libwebp-dev libkrb5-dev zlib1g-dev libbz2-dev libc-client2007e-dev libpq-dev libmysqlclient-dev libtidy-dev libmcrypt-dev libgmp-dev autoconf libcurl4-openssl-dev
-
-RUN cd /usr/src/php && \
+  curl -fSL https://www.php.net/distributions/php-7.4.10.tar.bz2 | tar -xj --strip-components=1 && \
   ./configure --help && \
   ./configure \
     --prefix=/usr \
     --with-bz2 \
     --with-curl \
     --enable-fpm \
-    --with-gd \
+    --enable-gd \
     --with-gmp \
     --with-imap \
     --with-imap-ssl \
     --enable-intl \
-    --with-jpeg-dir=/usr \
+    --with-jpeg \
     --with-kerberos \
     --enable-mbstring \
-    --with-mcrypt \
     --with-mysqli \
     --with-openssl \
-    --with-pcre-regex \
     --with-pdo-mysql \
     --with-pdo-pgsql \
-    --with-png-dir=/usr \
     --enable-soap \
     --with-pgsql \
     --with-tidy \
-    --with-webp-dir=/usr \
+    --with-webp \
     --enable-xml \
     --with-xmlrpc \
-    --enable-zip \
+    --with-zip \
     --with-zlib && \
   make && \
-  make install
+  make install && \
+  cd /usr/src && \
+  rm -rf /usr/src/php
 
 RUN cd /usr/src \
-  && git clone -b v1.2.1 https://github.com/edenhill/librdkafka.git && cd librdkafka && ./configure && make \
-  && make -C librdkafka install \
+  && git clone -b v1.4.4 https://github.com/edenhill/librdkafka.git && cd librdkafka && ./configure && make \
   && cd .. \
-  && git clone -b 3.1.2 https://github.com/arnaud-lb/php-rdkafka.git && cd php-rdkafka && phpize && ./configure && make all \
+  && make -C librdkafka install \
+  && git clone -b 3.1.3 https://github.com/arnaud-lb/php-rdkafka.git && cd php-rdkafka && phpize && ./configure && make all \
+  && cd .. \
   && make -C php-rdkafka install \
+  && rm -rf *
 
 EXPOSE 9000
 
