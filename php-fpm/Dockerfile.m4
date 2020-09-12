@@ -1,7 +1,7 @@
 FROM arctype/nginx
 
 RUN apt-get -y -q update && \
-  apt-get -q -y install unzip git libxml2-dev libpng-dev libjpeg-dev libwebp-dev libkrb5-dev zlib1g-dev libbz2-dev libc-client2007e-dev libpq-dev libmysqlclient-dev libtidy-dev libgmp-dev autoconf libcurl4-openssl-dev libsqlite3-dev libonig-dev libzip-dev
+  apt-get -q -y install unzip git libxml2-dev libpng-dev libjpeg-dev libwebp-dev libkrb5-dev zlib1g-dev libbz2-dev libc-client2007e-dev libpq-dev libmysqlclient-dev libtidy-dev libgmp-dev autoconf libcurl4-openssl-dev libsqlite3-dev libonig-dev libzip-dev libfreetype6-dev
 
 RUN mkdir -p /usr/src/php && \
   cd /usr/src/php && \
@@ -12,6 +12,7 @@ RUN mkdir -p /usr/src/php && \
     --with-bz2 \
     --with-curl \
     --enable-fpm \
+    --with-freetype \
     --enable-gd \
     --with-gmp \
     --with-imap \
