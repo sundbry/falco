@@ -6,4 +6,4 @@ fi
 
 # Set proper permissions when we mount this
 chmod 0755 /var/log/nginx
-nginx -c $NGINX_CONF
+exec nginx -c $NGINX_CONF
