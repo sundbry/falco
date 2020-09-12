@@ -1,10 +1,13 @@
 options:
   repository: arctype # Docker repository
   cluster: local
+  environment: default
 
 clusters:
   local:
     provider: native
     kubeconfig: .kubeconfig
 
-environments: {}
+environments: 
+  default: 
+    services: {}
