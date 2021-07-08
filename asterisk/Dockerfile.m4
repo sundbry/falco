@@ -1,7 +1,7 @@
-FROM REPOSITORY/base
-ARG ASTERISK_VERSION=16.6.2
+FROM arctype/base
+ARG ASTERISK_VERSION=16.19.0
 ARG SRTP_VERSION=1.6.0
-ARG JANSSON_VERSION=2.12
+ARG JANSSON_VERSION=2.13.1
 
 # Derived from https://github.com/hibou-io/asterisk-docker/blob/master/Dockerfile
 # https://hibou.io/blog/news-info-1/post/announcing-asterisk-docker-14
@@ -61,6 +61,8 @@ RUN cd /usr/src \
     && rm -rf /usr/src/pjproject*
 RUN cd /usr/src/asterisk \
     && ./configure --with-pjproject=/usr --with-pjproject-bundled=no --with-crypto --with-ssl --with-srtp \
+    && make menuselect.makeopts \
+    && menuselect/menuselect --disable BUILD_NATIVE menuselect.makeopts \
     && make && make install
 
 RUN mkdir -p /etc/service/asterisk
