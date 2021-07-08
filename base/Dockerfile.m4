@@ -1,4 +1,4 @@
-FROM phusion/baseimage:0.11
+FROM phusion/baseimage:focal-1.0.0
 
 ENV DEBIAN_FRONTEND=noninteractive KILL_PROCESS_TIMEOUT=60 KILL_ALL_PROCESS_TIMEOUT=60
 
