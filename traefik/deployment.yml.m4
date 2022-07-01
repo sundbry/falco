@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 metadata:
   name: traefik-ingress-controller
   labels:
@@ -18,7 +18,7 @@ spec:
       serviceAccountName: traefik-ingress-controller
       terminationGracePeriodSeconds: 60
       containers:
-      - image: traefik:v1.7.18
+      - image: IMAGE
         name: traefik-ingress-lb
         ports:
         - name: http
@@ -28,14 +28,18 @@ spec:
           containerPort: 443
           hostPort: 443
         - name: admin
-          containerPort: 58080
+          containerPort: 8080
         args:
-        - --api
-        - --kubernetes
-        - --logLevel=INFO
-        - --defaultentrypoints=http,https
-        - --entrypoints=Name:http Address::80
-        - --entrypoints=Name:https Address::443 TLS
+        - --providers.kubernetesingress
+        - --entryPoints.web.address=:80
+        - --entryPoints.websecure.address=:443
+        - --entrypoints.websecure.http.tls.certResolver=leresolver
+        #- --api
+        #- --kubernetes
+        #- --logLevel=INFO
+        #- --defaultentrypoints=http,https
+        #- --entrypoints=Name:http Address::80
+        #- --entrypoints=Name:https Address::443 TLS
       hostNetwork: true
       nodeSelector:
         ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
