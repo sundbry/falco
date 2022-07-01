@@ -5,7 +5,7 @@ RUN apt-get -y -q update && \
 
 RUN mkdir -p /usr/src/php && \
   cd /usr/src/php && \
-  curl -fSL https://www.php.net/distributions/php-7.4.10.tar.bz2 | tar -xj --strip-components=1 && \
+  curl -fSL https://www.php.net/distributions/php-7.4.30.tar.bz2 | tar -xj --strip-components=1 && \
   ./configure --help && \
   ./configure \
     --prefix=/usr \
