@@ -23,21 +23,13 @@ spec:
           image: IMAGE
           ports:
             - containerPort: 5432 # Postgres
-          env: 
+          env:
             - name: PGDATA
               value: /var/lib/postgresql/data/pgdata
             - name: `POSTGRES_USER' # Superuser
               value: postgres
             - name: `POSTGRES_PASSWORD' # Superuser password
               value: "POSTGRES_PASSWORD"
-            - name: `WALE_S3_PREFIX'
-              value: WALE_S3_PREFIX
-            - name: `WALE_S3_ENDPOINT'
-              value: ifelse(WALE_S3_ENDPOINT, `', `', WALE_S3_ENDPOINT)
-            - name: `AWS_ACCESS_KEY_ID'
-              value: AWS_ACCESS_KEY_ID
-            - name: `AWS_SECRET_ACCESS_KEY'
-              value: AWS_SECRET_ACCESS_KEY
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
