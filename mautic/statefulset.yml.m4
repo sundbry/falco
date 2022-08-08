@@ -7,7 +7,7 @@ metadata:
     name: NAME
     role: SERVICE
 spec:
-  replicas: REPLICAS
+  replicas: 1
   serviceName: SERVICE
   selector:
     matchLabels:
@@ -32,8 +32,8 @@ spec:
               value: "MAUTIC_DB_PASSWORD"
             - name: `MAUTIC_DB_NAME'
               value: "MAUTIC_DB_NAME"
-            - name: `MAUTIC_DB_USER'
-              value: "MAUTIC_DB_USER"
+            - name: `MAUTIC_RUN_CRON_JOBS'
+              value: "true"
           volumeMounts:
             - name: data
               mountPath: /var/www/html
