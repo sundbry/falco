@@ -1,4 +1,4 @@
-define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))dnl
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
@@ -24,7 +24,7 @@ spec:
           image: IMAGE
           ports:
             - containerPort: 6379
-          env: 
+          env:
             - name: REDIS_DATA
               value: /var/redis
           volumeMounts:
@@ -41,6 +41,9 @@ spec:
               command: ["redis-cli", "ping"]
       volumes:
         - name: data
-          emptyDir: {}
+          hostPath:
+            path: HOST_VOLUME_PATH
       imagePullSecrets:
         - name: docker
+      nodeSelector:
+        ifelse(NODE_SELECT, `', `', `kubernetes.io/hostname: 'NODE_SELECT)
