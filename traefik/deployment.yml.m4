@@ -32,6 +32,9 @@ spec:
         args:
         - --providers.kubernetesingress
         - --entryPoints.web.address=:80
+        - --entrypoints.web.http.redirections.entryPoint.to=websecure
+        - --entrypoints.web.http.redirections.entryPoint.scheme=https
+        - --entrypoints.web.http.redirections.entrypoint.permanent=true
         - --entryPoints.websecure.address=:443
         - --entrypoints.websecure.http.tls.certResolver=leresolver
         - --entryPoints.traefik.address=:8081
