@@ -1,0 +1,18 @@
+#!/bin/sh
+set -e
+
+if [ -z "$ENABLE_SSHD" ]; then
+  exit 0
+fi
+SSH_KEY_DIR=${SSH_KEY_DIR:-/etc/www}
+SSHD_CONFIG=${SSHD_CONFIG:-/etc/service/sshd/sshd_config}
+logger SSHD_CONFIG=${SSHD_CONFIG}
+if [ ! -f ${SSH_KEY_DIR}/ssh_host_rsa_key ]; then
+        ssh-keygen -f ${SSH_KEY_DIR}/ssh_host_rsa_key -N '' -t rsa
+fi
+if [ ! -f ${SSH_KEY_DIR}/ssh_host_dsa_key ]; then
+        ssh-keygen -f ${SSH_KEY_DIR}/ssh_host_dsa_key -N '' -t dsa
+fi
+sed -i "s~/etc/www~${SSH_KEY_DIR}~g" "${SSHD_CONFIG}"
+
+exec /usr/sbin/sshd -f "${SSHD_CONFIG}" -D

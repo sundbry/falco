@@ -5,7 +5,7 @@ RUN apt-get -y -q update && \
 
 RUN mkdir -p /usr/src/php && \
   cd /usr/src/php && \
-  curl -fSL https://www.php.net/distributions/php-7.4.30.tar.bz2 | tar -xj --strip-components=1 && \
+  curl -fSL https://www.php.net/distributions/php-7.4.33.tar.bz2 | tar -xj --strip-components=1 && \
   ./configure --help && \
   ./configure \
     --prefix=/usr \
@@ -59,3 +59,9 @@ ADD pool.d /etc/service/php-fpm/pool.d
 ADD run /etc/service/php-fpm/run
 RUN chmod 0755 /etc/service/php-fpm/run && \
   ln -sf /etc/service/php-fpm/php.ini /usr/lib/php.ini
+
+# Add ssh
+ADD run_sshd /etc/service/sshd/run
+ADD sshd_config /etc/service/sshd/sshd_config
+RUN chmod 0755 /etc/service/php-fpm/run /etc/service/sshd/run && \
+  rm -rf /etc/service/sshd/down
