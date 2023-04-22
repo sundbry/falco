@@ -1,4 +1,4 @@
-define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))
+define(`NAME', ifelse(PROFILE, `', SERVICE, SERVICE-PROFILE))dnl
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
@@ -41,7 +41,7 @@ spec:
             - name: `ENABLE_SPAMASSASSIN'
               value: "1"
             - name: `ENABLE_CLAMAV'
-              value: "1"
+              value: "0"
             - name: `ENABLE_FAIL2BAN'
               value: "ENABLE_FAIL2BAN"
             - name: `ENABLE_POSTGREY'
@@ -53,7 +53,7 @@ spec:
             - name: `ONE_DIR'
               value: "1"
             - name: `SSL_TYPE'
-              value: "SSL_TYPE"
+              value: "manual"
             - name: `SSL_CERT_PATH'
               value: "/etc/ssl/private/tls.crt"
             - name: `SSL_KEY_PATH'
