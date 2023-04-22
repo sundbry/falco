@@ -1,4 +1,4 @@
-FROM REPOSITORY/php-fpm
+FROM arctype/php-fpm
 
 RUN apt-get -y update && apt-get -y install php-imap
 
