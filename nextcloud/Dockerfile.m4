@@ -1,6 +1,6 @@
 FROM arctype/php-fpm
 
-RUN curl -fSL https://download.nextcloud.com/server/releases/nextcloud-19.0.3.tar.bz2 > /usr/src/nextcloud.tbz2
+RUN curl -fSL https://download.nextcloud.com/server/releases/nextcloud-20.0.14.tar.bz2 > /usr/src/nextcloud.tbz2
 RUN rm -f /etc/service/cron/down
 
 ENV NGINX_CONF=/etc/service/nextcloud/nginx.conf
